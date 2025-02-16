@@ -1,54 +1,35 @@
 #!/bin/bash
 
-# Set script to exit immediately if any command fails
 set -e  
 
-# Navigate to the project directory
 cd "$(dirname "$0")"
 
-# Run Playwright tests (ignore test failures)
+# Load email configuration from application.properties (located in src/main/resources)
+APP_PROPERTIES="src/main/resources/application.properties"
+
+EMAIL_RECIPIENTS=$(grep 'email.recipients' "$APP_PROPERTIES" | cut -d'=' -f2)
+EMAIL_SUBJECT=$(grep 'email.subject' "$APP_PROPERTIES" | cut -d'=' -f2)
+EMAIL_BODY=$(grep 'email.body' "$APP_PROPERTIES" | cut -d'=' -f2)
+
+# Run Playwright tests
 echo "Running Playwright tests..."
 mvn clean test -Dsurefire.failIfNoTests=false -DtestFailureIgnore=true    
 
 # Verify test results exist
-ALLURE_RESULTS_DIR="$WORKSPACE/allure-results"
-if [ ! -d "$ALLURE_RESULTS_DIR" ] || [ -z "$(ls -A $ALLURE_RESULTS_DIR)" ]; then
-    echo "Error: No Allure test results found in $ALLURE_RESULTS_DIR!"
+if [ ! -d "allure-results" ] || [ -z "$(ls -A allure-results)" ]; then
+    echo "Error: No Allure test results found!"
     exit 1
 fi
 
-# Debugging: List files in allure-results to confirm it has test details
-echo "Contents of allure-results directory:"
-ls -lh "$ALLURE_RESULTS_DIR"
-
-# Ensure Allure binary is available
-if ! command -v allure &> /dev/null; then
-    echo "Error: Allure command not found! Please install Allure or check your PATH."
-    exit 1
-fi
-
-# Generate a self-contained Allure report
-ALLURE_REPORT_DIR="$WORKSPACE/allure-report"
+# Generate Allure Report
 echo "Generating Allure report..."
-allure generate --clean "$ALLURE_RESULTS_DIR" -o "$ALLURE_REPORT_DIR" || {
-    echo "Error: Allure report generation failed!"
-    exit 1
-}
+allure generate --clean allure-results -o allure-report
 
-# Verify if report generation was successful
-if [ ! -d "$ALLURE_REPORT_DIR" ] || [ -z "$(ls -A $ALLURE_REPORT_DIR)" ]; then
-    echo "Error: Allure report directory is empty!"
-    exit 1
-fi
+# Define the Report URL (hosted via Jenkins)
+JENKINS_URL="http://your-jenkins-server/job/sample/allure-report"
 
-echo "Allure report successfully generated at: $ALLURE_REPORT_DIR"
+# Replace {REPORT_URL} placeholder in email body
+EMAIL_BODY=$(echo "$EMAIL_BODY" | sed "s|{REPORT_URL}|$JENKINS_URL|g")
 
-# Zip the report (optional)
-if command -v zip &> /dev/null; then
-    echo "Zipping the Allure report for archiving..."
-    zip -r "$WORKSPACE/allure-report.zip" "$ALLURE_REPORT_DIR"
-else
-    echo "Warning: zip command not found, skipping archive creation."
-fi
-
-echo "Script execution completed!"
+# Send Email
+echo -e "Subject: $EMAIL_SUBJECT\nMIME-Version: 1.0\nContent-Type: text/html\n\n$EMAIL_BODY" | sendmail -v $EMAIL_RECIPIENTS
