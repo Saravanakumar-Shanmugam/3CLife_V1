@@ -23,6 +23,8 @@ public class Started_Product {
 			AllureUtils.logStep("proceeding with Let's Get Started / Product section");
 			boolean notCompleted = BaseAction.isMenuCompleted(page, "Product");
 			BaseAction.assertTrueCondition(notCompleted == false, "section is not completed.");
+			BaseAction.waitForElement(page, CommonElements.bannerTitle);
+			BaseAction.listValidation(page, CommonElements.bannerTitle, BaseAction.split(rowData.get("Dashboard-title")));
 			BaseAction.waitForElement(page, com.page.Started_Product.productDropdown);
 			BaseAction.drSelection(page, com.page.Started_Product.productDropdown, rowData.get("Product Type"));
 			BaseAction.drSelection(page, com.page.Started_Product.termSelectionDropdown, rowData.get("Term Selection"));
@@ -83,7 +85,6 @@ public class Started_Product {
 			page.waitForTimeout(2000);
 			List<String> splitValues = BaseAction.split(rowData.get("Started_Product_Required"));
 			BaseAction.listValidation(page, CommonElements.error, splitValues);
-			BaseAction.clickElement(page, CommonElements.backToAppList);
 		} catch (Exception e) {
 			ErrorHandler.handleError("Started_Product", e, page);
 		}

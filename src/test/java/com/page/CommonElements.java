@@ -52,6 +52,10 @@ public class CommonElements {
 	public static Selector mailingZipCode = new Selector(SelectorType.XPATH,
 			"//h3[contains(normalize-space(text()), 'Mailing Address')]//parent::div//label//span[contains(normalize-space(text()),'Zip Code')]//parent::label//parent::div//following-sibling::div//input");
 
+	public static Selector bannerTitle = new Selector(SelectorType.XPATH,
+			"//div[@class='clife-dashboard bg-white']//div[contains(@class,'dashboard-header')]/span[@class='dashboard-title']");
+	public static Selector bannerInput = new Selector(SelectorType.XPATH,
+			"//div[@class='clife-dashboard bg-white']//div[contains(@class,'dashboard-header')]/span[@class='dashboard-items']");
 
 	public static Selector back = new Selector(SelectorType.XPATH, "//div//button[text()='Back']");
 	public static Selector next = new Selector(SelectorType.XPATH, "//div//button[text()='Next']");

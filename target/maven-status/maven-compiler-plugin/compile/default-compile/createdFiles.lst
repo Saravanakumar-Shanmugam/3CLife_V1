@@ -1,3 +1,4 @@
+com\utils\EmailSender.class
 com\utils\ErrorHandler.class
 com\base\AbstractRunner.class
 com\utils\EmailReportSender.class
@@ -8,6 +9,7 @@ com\utils\ExcelReader$1.class
 com\selectors\SelectorType.class
 com\utils\Main.class
 com\config\ConfigReader.class
+com\utils\EmailSender$1.class
 com\utils\ExcelReader.class
 com\selectors\LocatorFactory$1.class
 com\utils\Encrypter.class

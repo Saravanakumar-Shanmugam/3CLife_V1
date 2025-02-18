@@ -136,6 +136,12 @@
 			<artifactId>allure-testng</artifactId> <!-- or allure-junit5 if using JUnit -->
 			<version>2.21.0</version>
 		</dependency>
+		<!-- Add this JavaMail dependency to resolve the missing class -->
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>javax.mail</artifactId>
+			<version>1.6.2</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

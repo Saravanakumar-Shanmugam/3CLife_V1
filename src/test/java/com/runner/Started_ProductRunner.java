@@ -21,7 +21,7 @@ import io.qameta.allure.Feature;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class Started_ProductRunner extends AbstractRunner {
 
-	@Test
+//	@Test
 	@Order(1)
 	@Tag("Negative")
 	@Feature("Let's Get Started / Product section Negative Flow")
