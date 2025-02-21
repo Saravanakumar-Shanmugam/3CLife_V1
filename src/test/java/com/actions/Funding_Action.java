@@ -78,9 +78,12 @@ public class Funding_Action {
 						BaseAction.fillInputField(page, Funding_Page.surrenderingCompanyName,
 								rowData.get("Surrendering Company Name"));
 						BaseAction.clickElement(page, Funding_Page.companySearch);
+						BaseAction.waitForElement(page,  Funding_Page.ShrProcessingLocations);
 						BaseAction.selectByValue(page, Funding_Page.ShrProcessingLocations,
 								rowData.get("Processing Locations"));
 						BaseAction.clickElement(page, Funding_Page.selectCompany);
+						page.waitForTimeout(5000);
+						BaseAction.waitForNetworkIdle(page);
 						BaseAction.isTextPresent(page, Funding_Page.universalCarrierID,
 								rowData.get("Universal Carrier ID"));
 						BaseAction.isTextPresent(page, Funding_Page.universalLocationID,
@@ -120,17 +123,17 @@ public class Funding_Action {
 						if (rowData.get("Transfer Instructions").equalsIgnoreCase("Partial - Percentage")) {
 							BaseAction.typeInputField(page, Funding_Page.partialPercentage,
 									rowData.get("Partial Percentage"));
-						} else if (rowData.get("Transfer Instruction").equalsIgnoreCase("Partial - Amount")) {
+						} else if (rowData.get("Transfer Instructions").equalsIgnoreCase("Partial - Amount")) {
 							BaseAction.typeInputField(page, Funding_Page.partialAmount, rowData.get("Partial Amount"));
 						}
-						BaseAction.drSelection(page, Funding_Page.transferTiming, rowData.get("Transfer Timing"));
+						BaseAction.selectByValue(page, Funding_Page.transferTiming, rowData.get("Transfer Timing"));
 						if (rowData.get("Check this box").equalsIgnoreCase("Yes")) {
 							BaseAction.clickElement(page, Funding_Page.checkThisBox);
 						}
 					}
-					BaseAction.drSelection(page, Funding_Page.initiatedthereplacement,
-							rowData.get("initiated the replacement process"));
 					BaseAction.clickElement(page, CommonElements.save);
+//					BaseAction.drSelection(page, Funding_Page.initiatedthereplacement,
+//							rowData.get("initiated the replacement process"));
 				}
 			} else {
 				throw new AssertionError(
@@ -138,8 +141,8 @@ public class Funding_Action {
 								+ source.size() + "'");
 			}
 			BaseAction.isTextPresent(page, Funding_Page.totalCalExpInitialPremiumAmt,
-					"%" + rowData.get("total expected initial premium?"));
-			if (BaseAction.isElementDisabled(page, Funding_Page.totalCalExpInitialPremiumTick) == true) {
+					"$" + rowData.get("total expected initial premium?"));
+			if (BaseAction.hasBeforePseudoElement(page, Funding_Page.totalCalExpInitialPremiumTick) == true) {
 			} else {
 				System.err.println("Tick symbol is not present.....");
 			}

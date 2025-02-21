@@ -47,12 +47,12 @@ public class AllureUtils {
     public static void attachVideo(Page page) {
         try {
             if (page.video() != null) {
-                if (ConfigReader.getDebugMode()) {
+                if (ConfigReader.isDebugMode()) {
                     PlaywrightConfig.getContext().tracing().stop(
                             new Tracing.StopOptions().setPath(Paths.get("trace-" + BaseAction.getActiveTestMethod()
                                     + "-" + page.context().browser().browserType().name() + ".zip")));
                 }
-                if (ConfigReader.isHeadlessMode() || ConfigReader.getDebugMode()) {
+                if (ConfigReader.isHeadlessMode() || ConfigReader.isDebugMode()) {
                     PlaywrightConfig.getContext().close();
                 
                     Path videoPath = page.video().path();

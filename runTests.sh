@@ -19,7 +19,7 @@ echo "Generating Allure report..."
 allure generate --clean allure-results -o allure-report
 
 # Set Jenkins Report URL
-JENKINS_URL="http://your-jenkins-server/job/sample/allure-report"
+JENKINS_URL="http://localhost:8080/job/sample/allure-report"
 
 # Replace {REPORT_URL} placeholder in email body
 sed -i "s|{REPORT_URL}|$JENKINS_URL|g" src/main/resources/application.properties

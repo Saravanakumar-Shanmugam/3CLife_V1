@@ -45,7 +45,7 @@ public class Suitability_Action {
 				BaseAction.fillInputField(page, Suitability_Page.incomeSourcesOther, rowData.get("income sources Other"));
 			}
 		}
-		BaseAction.multiSelectByValue(page, Suitability_Page.reverseMortgageOrHomEquityLoan, rowData.get("reverse mortgage"));
+		BaseAction.drSelection(page, Suitability_Page.reverseMortgageOrHomEquityLoan, rowData.get("reverse mortgage"));
 		BaseAction.multiSelectByValue(page, Suitability_Page.financialResources, rowData.get("financial resource"));
 		List<String> financialResources = BaseAction.split(rowData.get("financial resource"));
 		for (int i = 0; i < financialResources.size(); i++) {

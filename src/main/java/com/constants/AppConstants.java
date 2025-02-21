@@ -12,27 +12,42 @@ public class AppConstants {
 	public static final String VIDEO_DIR_KEY = "videoDir";
 	public static final String ALLURE_RESULTS_PATH = "allure-results";
 
-	// Configuration Keys
-	public static final String BASE_URL_KEY = "baseURL";
-	public static final String BROWSERS_KEY = "browsers";
-	public static final String HEADLESS_MODE_KEY = "headlessMode";
-	public static final String USERNAME_KEY = "emailid";
-	public static final String PASSWORD_KEY = "password";
-	public static final String SECRET_KEY_KEY = "SecretKey";
-	public static final String LOGIN_ENDPOINT_KEY = "login.endpoint";
-	public static final String DEBUG_MODE_KEY = "Debug.Mode";
-	public static final String WAIT_TIMEOUT_MILLIS_KEY = "wait.timeout.millis"; 
+	public static final String BASE_URL = "baseURL";
+    public static final String BROWSERS = "browsers";
+    public static final String HEADLESS_MODE = "headlessMode";
+    public static final String WAIT_TIMEOUT = "wait.timeout.millis";
+    public static final String DEBUG_MODE = "Debug.Mode";  // Added Debug Mode
+    public static final String LOGIN_ENDPOINT = "login.endpoint";
 
+    // Email Configuration Keys
+    public static final String EMAIL_FROM = "email.from";
+    public static final String EMAIL_TO = "email.to";
+    public static final String EMAIL_SUBJECT = "email.subject";
+    public static final String EMAIL_BODY = "email.body";
 
+    // YAML Keys (Environment Configuration)
+    public static final String LOGIN_EMAIL = "login.email";
+    public static final String LOGIN_PASSWORD = "login.password";
+
+    // SMTP Configuration Keys
+    public static final String SMTP_SERVER = "smtp.server";
+    public static final String SMTP_PORT = "smtp.port";
+    public static final String SMTP_USERNAME = "smtp.username";
+    public static final String SMTP_PASSWORD = "smtp.password";
+    
+    
+    
+    
 	// URL End points
 	public static final String LOGIN_BYPASS_URL_PATTERN = "clientPipeline";
 
 	// Excel
-	public static final String EXCEL_FILE_PATH = Paths.get("src", "test", "resources", "Input_data", "ClientPopup.xls")
+	public static final String EXCEL_FILE_PATH = Paths.get("src", "test", "resources", "Input_data", "testData.xls")
 			.toString();
-	public static final String SHEET_NAME = "Clientpopup";
+	public static final String SHEET_NAME = "E-App Data's";
 	public static final String VALIDATION_SHEET_NAME = "Validations";
     public static final String OPTIONS_VALIDATION = "Options Validation";
+    public static final String FILE_DATA_PATH = "src/test/resources/file_data/";
 
 
 	public static final String YES = "Yes";

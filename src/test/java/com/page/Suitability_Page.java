@@ -16,7 +16,7 @@ public class Suitability_Page {
 	public static Selector incomeSources = new Selector(SelectorType.XPATH,
 			"//label//span[contains(normalize-space(),'Identify your income sources')]//parent::label/parent::div//following-sibling::div//label");
 	public static Selector reverseMortgageOrHomEquityLoan = new Selector(SelectorType.XPATH,
-			"//label//span[contains(normalize-space(),'reverse mortgage or home equity loan')]//parent::label/parent::div//following-sibling::div//label");
+			"//label//span[contains(normalize-space(),'reverse mortgage or home equity loan')]//parent::label/parent::div//following-sibling::div");
 	public static Selector financialResources = new Selector(SelectorType.XPATH,
 			"//label//span[contains(normalize-space(),'financial resource(s)')]//parent::label/parent::div//following-sibling::div//label");
 	public static Selector financialObjectives = new Selector(SelectorType.XPATH,

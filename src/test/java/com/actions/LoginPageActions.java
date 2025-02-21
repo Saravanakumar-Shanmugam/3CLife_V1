@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.base.BaseAction;
 import com.config.ConfigReader;
+import com.config.YamlConfigReader;
 import com.constants.AppConstants;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
@@ -39,9 +40,9 @@ public class LoginPageActions {
 
 	private static void performLoginSteps(Page page) {
 		AllureUtils.logStep("Filling in Email");
-		BaseAction.fillInputField(page, LoginPage.emailInput, ConfigReader.getUsername());
+		BaseAction.fillInputField(page, LoginPage.emailInput, YamlConfigReader.getLoginEmail());
 		AllureUtils.logStep("Filling in Password");
-		BaseAction.fillInputField(page, LoginPage.passwordInput, ConfigReader.getPassword());
+		BaseAction.fillInputField(page, LoginPage.passwordInput, YamlConfigReader.getLoginPassword());
 		AllureUtils.logStep("Clicking login button");
 		BaseAction.clickElement(page, LoginPage.loginInput);
 	}

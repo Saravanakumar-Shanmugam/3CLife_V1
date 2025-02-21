@@ -3,6 +3,7 @@ package com.base;
 import static org.junit.Assert.assertTrue;
 
 import java.io.PrintStream;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,7 +13,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.config.ConfigReader;
+import com.constants.AppConstants;
 import com.microsoft.playwright.ElementHandle;
+import com.microsoft.playwright.FileChooser;
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.PlaywrightException;
@@ -27,7 +30,8 @@ public class BaseAction {
 	public static final Logger logger = LoggerFactory.getLogger(BaseAction.class);
 	static PrintStream originalErr = System.err;
 	public static Selector options = new Selector(SelectorType.XPATH, "//div[@role='option']");
-	public static Selector selectedDate = new Selector(SelectorType.XPATH, "//div[@role='listbox']//div[@aria-selected='true']");
+	public static Selector selectedDate = new Selector(SelectorType.XPATH,
+			"//div[@role='listbox']//div[@aria-selected='true']");
 
 	// Retrieves the currently active test method
 	public static String getActiveTestMethod() {
@@ -70,32 +74,32 @@ public class BaseAction {
 		logger.error("{} is not found in the Options.", value);
 	}
 
-	 public static void multiSelectByValue(Page page, Selector selector, String value) {
-	        Locator locator = getLocator(page, selector);
-	        waitForElement(page, selector);
-	        List<String> options = split(value);
-	        List<String> notFoundOptions = new ArrayList<>();
+	public static void multiSelectByValue(Page page, Selector selector, String value) {
+		Locator locator = getLocator(page, selector);
+		waitForElement(page, selector);
+		List<String> options = split(value);
+		List<String> notFoundOptions = new ArrayList<>();
 
-	        for (String option : options) {
-	            boolean isOptionFound = false;  // Reset for each option
+		for (String option : options) {
+			boolean isOptionFound = false; // Reset for each option
 
-	            for (int j = 0; j < locator.count(); j++) {
-	                if (locator.nth(j).innerText().trim().equalsIgnoreCase(option)) {
-	                    locator.nth(j).click();
-	                    isOptionFound = true;
-	                    break; // Stop searching once found
-	                }
-	            }
+			for (int j = 0; j < locator.count(); j++) {
+				if (locator.nth(j).innerText().trim().equalsIgnoreCase(option)) {
+					locator.nth(j).click();
+					isOptionFound = true;
+					break; // Stop searching once found
+				}
+			}
 
-	            if (!isOptionFound) {
-	                notFoundOptions.add(option);
-	            }
-	        }
+			if (!isOptionFound) {
+				notFoundOptions.add(option);
+			}
+		}
 
-	        if (!notFoundOptions.isEmpty()) {
-	            logger.error("The following options were not found: {}", String.join(", ", notFoundOptions));
-	        }
-	    }
+		if (!notFoundOptions.isEmpty()) {
+			logger.error("The following options were not found: {}", String.join(", ", notFoundOptions));
+		}
+	}
 
 	// Generic method to select dropdown value by text Contain
 	public static void selectByValueContain(Page page, Selector selector, String value) {
@@ -111,8 +115,8 @@ public class BaseAction {
 	}
 
 	// Date picker implementation
-	public static void datePicker(Page page, Selector selector,String date) {
-		typeInputField(page,selector, date);
+	public static void datePicker(Page page, Selector selector, String date) {
+		typeInputField(page, selector, date);
 		clickElement(page, selectedDate);
 	}
 
@@ -137,7 +141,6 @@ public class BaseAction {
 			Locator locator = getLocator(page, selector);
 			scrollToView(page, locator);
 			if (locator.isVisible()) {
-				locator.highlight();
 				locator.fill(value);
 			} else {
 				logger.warn("Field not visible: {}", selector.getValue());
@@ -151,7 +154,6 @@ public class BaseAction {
 		Locator locator = getLocator(page, selector);
 		scrollToView(page, locator);
 		if (locator.isVisible()) {
-//			locator.highlight();
 			locator.pressSequentially(value);
 		} else {
 			logger.warn("Field not visible: {}", selector.getValue());
@@ -163,7 +165,6 @@ public class BaseAction {
 		Locator locator = getLocator(page, selector, index);
 		scrollToView(page, locator);
 		if (locator.isVisible()) {
-			locator.highlight();
 			locator.fill(value);
 		} else {
 			logger.warn("Field not visible: {}", selector.getValue());
@@ -175,7 +176,6 @@ public class BaseAction {
 		Locator locator = getLocator(page, selector, index);
 		scrollToView(page, locator);
 		if (locator.isVisible()) {
-			locator.highlight();
 			locator.pressSequentially(value);
 		} else {
 			logger.warn("Field not visible: {}", selector.getValue());
@@ -188,7 +188,6 @@ public class BaseAction {
 			Locator locator = getLocator(page, selector);
 			scrollToView(page, locator);
 			if (locator.isVisible() && locator.isEnabled()) {
-				locator.highlight();
 				locator.click(new Locator.ClickOptions().setForce(true));
 				waitForNetworkIdle(page);
 			} else {
@@ -220,7 +219,7 @@ public class BaseAction {
 	public static void waitForElement(Page page, Selector selector) {
 		try {
 			page.waitForSelector(selector.getValue(),
-					new Page.WaitForSelectorOptions().setTimeout(ConfigReader.getWaitTimeoutMillis()));
+					new Page.WaitForSelectorOptions().setTimeout(ConfigReader.getTimeout()));
 			waitForNetworkIdle(page);
 		} catch (Exception e) {
 			logger.error("Element not found within the timeout period: {}", selector.getValue(), e);
@@ -305,6 +304,20 @@ public class BaseAction {
 		return getLocator(page, selector).isDisabled();
 	}
 
+	public static boolean hasBeforePseudoElement(Page page, Selector locator) {
+		String script = "(element) => window.getComputedStyle(element, '::before').content !== 'none'";
+
+		boolean hasBefore = (boolean) page.evaluate(script, getLocator(page, locator).elementHandle());
+
+		if (hasBefore) {
+			System.out.println("Pseudo-element '::before' is present.");
+		} else {
+			System.out.println("Pseudo-element '::before' is not present.");
+		}
+
+		return hasBefore;
+	}
+
 	// Validate the state (enabled/disabled) of an element
 	public static void validateElementState(Page page, Selector selector, Boolean expectedState,
 			String stateDescription) {
@@ -366,7 +379,7 @@ public class BaseAction {
 		}
 		return Arrays.asList(value.split(","));
 	}
-	
+
 	// Method to split a string by comma and store in a List<String>
 	public static List<String> splitslash(String value) {
 		if (value == null || value.trim().isEmpty()) {
@@ -381,16 +394,16 @@ public class BaseAction {
 				for (int i = 0; i < locator.count(); i++) {
 					if (locator.nth(i).textContent().trim().equalsIgnoreCase(list.get(i).trim())) {
 						scrollToView(page, locator.nth(i));
-						locator.nth(i).highlight();
 					} else {
-						Assert.fail("Expected text :"+ list.get(i).trim()+"is missmatch actual text is "+locator.nth(i).textContent().trim());
+						Assert.fail("Expected text :" + list.get(i).trim() + "is missmatch actual text is "
+								+ locator.nth(i).textContent().trim());
 					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		} else {
-			Assert.fail("Expected Count :"+ list.size() +"is missmatch actual Count is "+locator.count());
+			Assert.fail("Expected Count :" + list.size() + "is missmatch actual Count is " + locator.count());
 		}
 	}
 
@@ -406,5 +419,24 @@ public class BaseAction {
 			return false;
 		}
 		return menuItem.getAttribute("class").contains("completed");
+	}
+
+	public static void Uploiad(Page page, Selector selector, String fileName) {
+		FileChooser fileChooser = page.waitForFileChooser(() -> getLocator(page, selector).click());
+		fileChooser.setFiles(Paths.get(AppConstants.FILE_DATA_PATH + fileName));
+	}
+
+	public static int singleValueListValidation(Page page, Selector selector, String value) {
+		int position = 0;
+		Locator locator = getLocator(page, selector);
+		waitForElement(page, selector);
+		for (int i = 0; i < locator.count(); i++) {
+			if (locator.nth(i).innerText().trim().equalsIgnoreCase(value)) {
+				logger.info(value + " is present in the list....");		
+				return position=i;
+			}
+		}
+		logger.error("{} is not found in the Options.", value);
+		return position;
 	}
 }

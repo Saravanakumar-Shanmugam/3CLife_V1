@@ -43,7 +43,7 @@ public class Suitability_Runner extends AbstractRunner {
 			logger.info("Method taken from the createapplication and the method name is " + createMethod);
 			
 			Object[][] executionData = { { createApplication, createMethod, rowData },
-					{ product, additionalInformation, rowData },
+//					{ product, additionalInformation, rowData },
 					{ product, financialResources, rowData },
 					{ product, financialProfile, rowData },
 					{ product, Replacements, rowData },

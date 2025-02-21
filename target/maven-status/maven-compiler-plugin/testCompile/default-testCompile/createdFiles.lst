@@ -7,8 +7,10 @@ com\page\Started_Product.class
 com\actions\App_Processor.class
 com\actions\Owner_Actions.class
 com\page\Suitability_Page.class
+com\page\Documents_Signature_Page.class
 com\actions\Suitability_Action.class
 com\runner\Started_ProductRunner.class
+com\actions\Documents_Signature_Actions.class
 com\runner\TestSuiteRunner.class
 com\actions\Funding_Action.class
 com\runner\Suitability_Runner.class
@@ -27,6 +29,7 @@ com\runner\Consents_Remarks_Runner.class
 com\runner\Funding_Runner.class
 com\page\Annuitant_Page.class
 com\actions\Trust_Actions.class
+com\runner\Documents_Signature_Runner.class
 com\actions\ExcelTestDataUtil.class
 com\page\Trust_Page.class
 com\runner\CreateApplicationRunner.class

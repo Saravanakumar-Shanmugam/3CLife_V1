@@ -37,7 +37,7 @@ public class PlaywrightConfig {
     public static Page setupBrowser(String browserType) {
         logger.info("Launching browser: " + browserType);
         BrowserType.LaunchOptions options = new BrowserType.LaunchOptions()
-                .setHeadless(Boolean.parseBoolean(ConfigReader.getProperty(AppConstants.HEADLESS_MODE_KEY, "true")))
+                .setHeadless(ConfigReader.isHeadlessMode())
                 .setArgs(List.of("--disable-dev-shm-usage", "--no-sandbox"));
 
         Browser browserInstance = launchBrowser(playwright.get(), browserType, options);
@@ -74,7 +74,7 @@ public class PlaywrightConfig {
 
     private static void setupContextOptions(Browser.NewContextOptions contextOptions) {
         if (ConfigReader.isHeadlessMode()) {
-            contextOptions.setRecordVideoDir(Paths.get(ConfigReader.getProperty(AppConstants.VIDEO_DIR_KEY, "videos/")))
+            contextOptions.setRecordVideoDir(Paths.get(AppConstants.VIDEO_DIR_KEY, "videos/"))
                     .setRecordVideoSize(1280, 720);
         }
 
@@ -90,7 +90,7 @@ public class PlaywrightConfig {
     }
 
     private static void startTracingIfDebugMode() {
-        if (ConfigReader.getDebugMode()) {
+        if (ConfigReader.isDebugMode()) {
             context.tracing().start(new Tracing.StartOptions()
                     .setScreenshots(true)
                     .setSnapshots(true)

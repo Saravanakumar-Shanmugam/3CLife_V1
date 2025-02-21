@@ -62,7 +62,7 @@ public class Joint_Annuitant_Action {
 					rowData.get("Joint Annuitant Same as Owner"));
 			
 			BaseAction.clickElement(page, CommonElements.next);
-			name(page, rowData);
+//			name(page, rowData);
 			
 		} catch (Exception e) {
 			ErrorHandler.handleError("Joint Annuitant Section..", e, page);
