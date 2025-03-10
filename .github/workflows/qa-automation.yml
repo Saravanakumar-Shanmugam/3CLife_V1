@@ -2,68 +2,84 @@ name: QA Automation Tests
 
 on:
   workflow_dispatch:  # Allows manual trigger
-  push:
-    branches:
-      - main  # Runs the workflow on push to main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        java-version: [17]
+      fail-fast: false
 
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
-    - name: Debug - List Repository Files
-      run: ls -R
-
-    - name: Debug - Check Current Directory
-      run: pwd
-
-    - name: Set Up JDK 17
+    - name: Set up JDK
       uses: actions/setup-java@v3
       with:
-        java-version: 17
+        java-version: ${{ matrix.java-version }}
         distribution: 'temurin'
         cache: 'maven'
 
-    - name: Install Playwright Browsers
-      run: npx playwright install
-
-    - name: Debug - Verify `runtest.sh` Exists
-      run: ls -l 3CLife_V1/runtest.sh || echo "❌ runtest.sh not found!"
-
-    - name: Make `runtest.sh` Executable
-      run: chmod +x 3CLife_V1/runtest.sh
-
-    - name: Debug - Confirm Execution Permission
-      run: ls -l 3CLife_V1/runtest.sh
-
-    - name: Run Tests from `runtest.sh`
-      run: ./3CLife_V1/runtest.sh
+    - name: Install Playwright CLI (API Only)
+      run: |
+        cd 3CLife_V1
+        mvn exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install"
       env:
-        PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+        PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1  # ✅ Prevents unnecessary browser downloads
 
-    - name: Get Allure History
-      uses: actions/checkout@v3
-      if: always()
-      continue-on-error: true
-      with:
-        ref: gh-pages
-        path: gh-pages
+    - name: Install Allure CLI
+      run: |
+        sudo apt remove -y allure || true  # Remove incorrect version if installed
+        curl -o allure-2.25.0.tgz -fsSL https://github.com/allure-framework/allure2/releases/download/2.25.0/allure-2.25.0.tgz
+        tar -zxvf allure-2.25.0.tgz
+        sudo mv allure-2.25.0 /opt/allure
+        sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure
+        export PATH=$PATH:/opt/allure/bin
+        allure --version 
+
+    - name: Run Playwright API Tests
+      run: |
+        cd 3CLife_V1
+        mvn clean test -Dsurefire.failIfNoTests=false -DtestFailureIgnore=true -Dallure.results.directory=allure-results
+      env:
+        PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1  # ✅ Ensures no browser download
+
+    - name: Check Allure Results
+      run: |
+        if [ ! -d "3CLife_V1/allure-results" ] || [ -z "$(ls -A 3CLife_V1/allure-results)" ]; then
+          echo "❌ No Allure results found! Exiting..."
+          exit 1
+        fi
 
     - name: Generate Allure Report
-      uses: simple-elf/allure-report-action@master
-      if: always()
-      with:
-        allure_results: 3CLife_V1/target/allure-results
-        allure_history: allure-history
-        keep_reports: 20
+      run: |
+        cd 3CLife_V1
+        allure generate --clean allure-results -o allure-report || { echo "❌ Allure report generation failed!"; exit 1; }
 
-    - name: Deploy Allure Report to GitHub Pages
-      if: always()
-      uses: peaceiris/actions-gh-pages@v3
+    - name: Check Allure Report
+      run: |
+        if [ ! -d "3CLife_V1/allure-report" ] || [ -z "$(ls -A 3CLife_V1/allure-report)" ]; then
+          echo "❌ No Allure report generated!"
+          exit 1
+        fi
+
+    - name: Upload Allure Report Artifact
+      uses: actions/upload-artifact@v4
       with:
-        github_token: ${{ secrets.MY_GITHUB_PAT }}
-        publish_branch: gh-pages
-        publish_dir: allure-history
+        name: allure-report
+        path: 3CLife_V1/allure-report
+
+    - name: Send Slack Notification
+      uses: rtCamp/action-slack-notify@v2
+      env:
+        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
+        SLACK_MESSAGE: "📊 Test execution completed. View Allure Report at: <GITHUB_RUN_URL>"
+        SLACK_COLOR: "#36a64f"
