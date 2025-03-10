@@ -85,6 +85,9 @@ jobs:
         branch: gh-pages
         folder: 3CLife_V1/allure-report
         clean: true  # Remove old files before deploying
+        repository-name: ${{ github.repository }}
+        repository-path: 3CLife_V1  # ✅ Fix: Ensure deployment runs inside the Git repo
+
 
     - name: Share GitHub Pages Link
       run: |
