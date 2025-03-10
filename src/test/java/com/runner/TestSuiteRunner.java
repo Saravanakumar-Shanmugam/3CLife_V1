@@ -7,7 +7,7 @@ import org.junit.platform.suite.api.SelectClasses;
 import org.junit.platform.suite.api.Suite;
 
 @Suite
-@SelectClasses({EApp_Runner.class})
+@SelectClasses({LoginPageRunner.class})
 @IncludeTags("positive")
 @Execution(ExecutionMode.CONCURRENT) 
 public class TestSuiteRunner {
