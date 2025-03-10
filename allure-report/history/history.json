@@ -1,0 +1,1 @@
+{"a5f5ec5cd0cae8e677f66efcebcc9367":{"statistic":{"failed":0,"broken":0,"skipped":0,"passed":1,"unknown":0,"total":1},"items":[{"uid":"cefd768c2caa670d","reportUrl":"http://localhost/report/#testresult/cefd768c2caa670d","status":"passed","time":{"start":1741614430583,"stop":1741614442574,"duration":11991}}]}}
