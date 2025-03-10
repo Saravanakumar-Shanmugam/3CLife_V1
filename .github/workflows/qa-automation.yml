@@ -14,6 +14,12 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
+    - name: Debug - List Repository Files
+      run: ls -R
+
+    - name: Debug - Check Current Directory
+      run: pwd
+
     - name: Set Up JDK 17
       uses: actions/setup-java@v3
       with:
@@ -24,9 +30,17 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install
 
-    - name: Run Automation Tests
-      run: |
-        mvn clean test -Dsurefire.failIfNoTests=false -DtestFailureIgnore=true
+    - name: Debug - Verify `runtest.sh` Exists
+      run: ls -l 3CLife_V1/runtest.sh || echo "❌ runtest.sh not found!"
+
+    - name: Make `runtest.sh` Executable
+      run: chmod +x 3CLife_V1/runtest.sh
+
+    - name: Debug - Confirm Execution Permission
+      run: ls -l 3CLife_V1/runtest.sh
+
+    - name: Run Tests from `runtest.sh`
+      run: ./3CLife_V1/runtest.sh
       env:
         PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
@@ -42,7 +56,7 @@ jobs:
       uses: simple-elf/allure-report-action@master
       if: always()
       with:
-        allure_results: target/allure-results
+        allure_results: 3CLife_V1/target/allure-results
         allure_history: allure-history
         keep_reports: 20
 
@@ -50,23 +64,6 @@ jobs:
       if: always()
       uses: peaceiris/actions-gh-pages@v3
       with:
-         github_token: ${{ secrets.MY_GITHUB_PAT }}
+        github_token: ${{ secrets.MY_GITHUB_PAT }}
         publish_branch: gh-pages
         publish_dir: allure-history
-
-    - name: Notify on Failure
-      if: failure()
-      uses: actions/github-script@v6
-      with:
-        script: |
-          const { repo, owner } = context.repo;
-          const run_id = context.runId;
-          const run_url = `https://github.com/${owner}/${repo}/actions/runs/${run_id}`;
-          const message = `❌ Tests failed on ${context.payload.ref}\nSee details: ${run_url}`;
-          github.rest.issues.create({
-            owner,
-            repo,
-            title: `Test failure on ${context.payload.ref}`,
-            body: message,
-            labels: ['test-failure']
-          });
