@@ -80,16 +80,13 @@ jobs:
         path: 3CLife_V1/allure-report
 
     - name: Deploy Allure Report to GitHub Pages
-      run: |
-        cd 3CLife_V1  # ✅ Move into the correct Git directory
-        git config --global --add safe.directory $(pwd)  # ✅ Ensure Git recognizes the repo
-        git config user.name "${{ github.actor }}" 
-        git config user.email "${{ github.actor }}@users.noreply.github.com" 
-        npx -y github-pages-deploy-action@v4 \
-          --branch gh-pages \
-          --folder allure-report \
-          --clean \
-          --commit-message "Deploy Allure Report - $(date '+%Y-%m-%d %H:%M:%S')"
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        branch: gh-pages
+        folder: 3CLife_V1/allure-report
+        clean: true  # Remove old files before deploying
+        commit-message: "Deploy Allure Report - $(date '+%Y-%m-%d %H:%M:%S')"  # ✅ Adds timestamp
+
 
     - name: Share GitHub Pages Link
       run: |
