@@ -19,10 +19,9 @@ jobs:
 
     steps:
     - name: Checkout Repository
-  uses: actions/checkout@v3
-  with:
-    path: 3CLife_V1  # Ensures the repo is checked out into this directory
-
+      uses: actions/checkout@v3
+      with:
+        path: 3CLife_V1  # Ensures the repo is checked out into this directory
 
     - name: Set up JDK
       uses: actions/setup-java@v3
@@ -84,5 +83,5 @@ jobs:
       uses: rtCamp/action-slack-notify@v2
       env:
         SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-        SLACK_MESSAGE: "📊 Test execution completed. View Allure Report at: <GITHUB_RUN_URL>"
+        SLACK_MESSAGE: "📊 Test execution completed. View Allure Report at: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
         SLACK_COLOR: "#36a64f"
