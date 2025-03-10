@@ -1,0 +1,2 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Mon Mar 10 13:56:32 UTC 2025","Mon Mar 10 13:56:36 UTC 2025","3945","","com.runner.LoginPageRunner","","com.runner.LoginPageRunner","testLoginPagePositive","testLoginPagePositive()",""

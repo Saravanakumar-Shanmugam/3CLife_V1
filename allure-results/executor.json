@@ -1,8 +1,0 @@
-{
-    "buildName": "Default Build",
-    "name": "Default CI",
-    "buildUrl": "http://localhost/build",
-    "reportUrl": "http://localhost/report",
-    "type": "Local",
-    "url": "http://localhost"
-}
