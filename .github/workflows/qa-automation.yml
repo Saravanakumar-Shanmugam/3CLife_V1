@@ -1,87 +1,69 @@
-name: QA Automation Tests
+#!/bin/bash
 
-on:
-  workflow_dispatch:  # Allows manual trigger
+set -e  # Exit on error
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+cd "$(dirname "$0")"
 
-jobs:
-  test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        java-version: [17]
-      fail-fast: false
+# Run Playwright tests
+echo "Running Playwright tests..."
+mvn clean test -Dtest=com.runner.TestSuiteRunner -Dsurefire.failIfNoTests=false -DtestFailureIgnore=true
 
-    steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
-      with:
-        path: 3CLife_V1  # Ensures the repo is checked out into this directory
+# Verify if test results exist
+if [ ! -d "allure-results" ] || [ "$(find allure-results -type f | wc -l)" -eq 0 ]; then
+    echo "❌ Error: No Allure test results found!"
+    exit 1
+fi
 
-    - name: Set up JDK
-      uses: actions/setup-java@v3
-      with:
-        java-version: ${{ matrix.java-version }}
-        distribution: 'temurin'
-        cache: 'maven'
+# Check if Allure CLI is installed
+if ! which allure > /dev/null 2>&1; then
+    echo "❌ Error: Allure CLI is not installed or not in PATH. Please install it."
+    exit 1
+fi
 
-    - name: Install Playwright CLI (API Only)
-      run: |
-        cd 3CLife_V1
-        mvn exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install"
-      env:
-        PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1  # ✅ Prevents unnecessary browser downloads
+# Generate Allure report
+echo "Generating Allure report..."
+allure generate --clean allure-results -o allure-report
 
-    - name: Install Allure CLI
-      run: |
-        sudo apt remove -y allure || true  # Remove incorrect version if installed
-        curl -o allure-2.25.0.tgz -fsSL https://github.com/allure-framework/allure2/releases/download/2.25.0/allure-2.25.0.tgz
-        tar -zxvf allure-2.25.0.tgz
-        sudo mv allure-2.25.0 /opt/allure
-        sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure
-        export PATH=$PATH:/opt/allure/bin
-        allure --version 
+# Get GitHub Actions Job URL
+GITHUB_RUN_URL="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 
-    - name: Run Playwright API Tests
-      run: |
-        cd 3CLife_V1
-        mvn clean test -Dsurefire.failIfNoTests=false -DtestFailureIgnore=true -Dallure.results.directory=allure-results
-      env:
-        PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1  # ✅ Ensures no browser download
+# Ensure application.properties exists before modifying
+if [ ! -f "src/main/resources/application.properties" ]; then
+    echo "❌ Error: application.properties file not found!"
+    exit 1
+fi
 
-    - name: Check Allure Results
-      run: |
-        if [ ! -d "3CLife_V1/allure-results" ] || [ -z "$(ls -A 3CLife_V1/allure-results)" ]; then
-          echo "❌ No Allure results found! Exiting..."
-          exit 1
-        fi
+# Replace {REPORT_URL} placeholder in application.properties (cross-platform)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    sed -i '' "s|{REPORT_URL}|$GITHUB_RUN_URL|g" src/main/resources/application.properties
+else
+    sed -i "s|{REPORT_URL}|$GITHUB_RUN_URL|g" src/main/resources/application.properties
+fi
 
-    - name: Generate Allure Report
-      run: |
-        cd 3CLife_V1
-        allure generate --clean allure-results -o allure-report || { echo "❌ Allure report generation failed!"; exit 1; }
+# Send email using EmailSender class from com.utils package
+echo "Sending email with report link: $GITHUB_RUN_URL"
+mvn exec:java -Dexec.mainClass="com.utils.EmailSender" -Dexec.classpathScope=test -Dexec.args="$GITHUB_RUN_URL"
 
-    - name: Check Allure Report
-      run: |
-        if [ ! -d "3CLife_V1/allure-report" ] || [ -z "$(ls -A 3CLife_V1/allure-report)" ]; then
-          echo "❌ No Allure report generated!"
-          exit 1
-        fi
+echo "✅ Test execution and reporting completed!"
 
-    - name: Upload Allure Report Artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: allure-report
-        path: 3CLife_V1/allure-report
+# Deploy Allure Report to GitHub Pages
+echo "🚀 Deploying Allure report to GitHub Pages..."
 
-    - name: Send Slack Notification
-      uses: rtCamp/action-slack-notify@v2
-      env:
-        SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
-        SLACK_MESSAGE: "📊 Test execution completed. View Allure Report at: $GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
-        SLACK_COLOR: "#36a64f"
+# Ensure gh-pages branch exists
+if [ ! -d "gh-pages" ]; then
+  git clone --branch=gh-pages https://github.com/${GITHUB_REPOSITORY}.git gh-pages
+fi
+
+# Copy the new Allure report
+rm -rf gh-pages/*
+cp -r allure-report/* gh-pages/
+
+# Commit and push changes
+cd gh-pages
+git config --global user.email "github-actions@github.com"
+git config --global user.name "GitHub Actions"
+git add .
+git commit -m "🚀 Updated Allure Report [$(date)]" || echo "No changes to commit"
+git push origin gh-pages
+
+echo "✅ Allure report deployed: https://${GITHUB_REPOSITORY_OWNER}.github.io/${GITHUB_REPOSITORY}/"
