@@ -19,7 +19,10 @@ jobs:
 
     steps:
     - name: Checkout Repository
-      uses: actions/checkout@v3
+  uses: actions/checkout@v3
+  with:
+    path: 3CLife_V1  # Ensures the repo is checked out into this directory
+
 
     - name: Set up JDK
       uses: actions/setup-java@v3
