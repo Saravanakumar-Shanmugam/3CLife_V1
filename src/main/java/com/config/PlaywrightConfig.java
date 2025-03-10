@@ -24,7 +24,8 @@ public class PlaywrightConfig {
     private static final ThreadLocal<Browser> browser = new ThreadLocal<>();
     private static BrowserContext context;
     private static Page page;
-    private static boolean authStateExists = false;
+
+	private static boolean authStateExists = false;
 
     public static BrowserContext getContext() {
         return context;

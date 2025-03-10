@@ -14,6 +14,7 @@ com\actions\Documents_Signature_Actions.class
 com\runner\TestSuiteRunner.class
 com\actions\Funding_Action.class
 com\runner\Suitability_Runner.class
+com\runner\Trust_Runner.class
 com\runner\Beneficiaries_Runner.class
 com\runner\Annuitant_Runner.class
 com\runner\Owner_Runner.class

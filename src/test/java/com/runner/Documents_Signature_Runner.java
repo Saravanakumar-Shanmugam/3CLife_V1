@@ -24,7 +24,7 @@ public class Documents_Signature_Runner extends AbstractRunner {
 	@Feature("Documents & Signature Information Positive Flow")
 	public void ownerInformation() {
 		try {
-			Map<String, String> rowData = ExcelTestDataUtil.getData().get("TestCase-No:1");
+			Map<String, String> rowData = ExcelTestDataUtil.getData().get("TestCase-No:2");
 
 			CreateApplication createApplication = new CreateApplication();
 			Method createMethod = CreateApplication.class.getMethod("name", Page.class, Map.class);

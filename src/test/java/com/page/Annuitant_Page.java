@@ -20,13 +20,7 @@ public class Annuitant_Page {
 	
 	public static String isThereJointAnnuitantQuestion = "//label//span[contains(normalize-space(text()),'Is there a Joint Annuitant?')]//parent::label//parent::div//parent::div[@id]";
 	public static Selector jointAnnuitantSameOwner = new Selector(SelectorType.XPATH,
-			"//label//span[contains(normalize-space(text()),'Joint Annuitant the Owner?')]//parent::label//parent::div//following-sibling::div/label");
+			"//label/span[contains(normalize-space(text()),'Joint Annuitant, also the Owner')]/parent::label/parent::div/following-sibling::div/label");
 	public static Selector isThereJointAnnuitant = new Selector(SelectorType.XPATH,
 			"//label//span[contains(normalize-space(text()),'Is there a Joint Annuitant?')]//parent::label//parent::div//following-sibling::div/label");
-	
-	public static Selector jointAnnuitantSameJointOwner = new Selector(SelectorType.XPATH,
-			"//label//span[contains(normalize-space(text()),'Joint Annuitant the Joint Owner?')]//parent::label//parent::div//following-sibling::div/label");
-	public static Selector jointAnnuitantOwnerOrJointOwner = new Selector(SelectorType.XPATH,
-			"//label//span[contains(normalize-space(text()),'Joint Annuitant the Joint Owner?')]//parent::label//parent::div//following-sibling::div/label");
-	
 }

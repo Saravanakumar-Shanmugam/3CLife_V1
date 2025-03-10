@@ -12,7 +12,6 @@ import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.config.ConfigReader;
 import com.constants.AppConstants;
 import com.microsoft.playwright.ElementHandle;
 import com.microsoft.playwright.FileChooser;
@@ -165,6 +164,7 @@ public class BaseAction {
 		Locator locator = getLocator(page, selector, index);
 		scrollToView(page, locator);
 		if (locator.isVisible()) {
+			locator.click();
 			locator.fill(value);
 		} else {
 			logger.warn("Field not visible: {}", selector.getValue());
@@ -218,8 +218,7 @@ public class BaseAction {
 	// Waits for an element to be present in the DOM and ready for interaction
 	public static void waitForElement(Page page, Selector selector) {
 		try {
-			page.waitForSelector(selector.getValue(),
-					new Page.WaitForSelectorOptions().setTimeout(ConfigReader.getTimeout()));
+			page.waitForSelector(selector.getValue());
 			waitForNetworkIdle(page);
 		} catch (Exception e) {
 			logger.error("Element not found within the timeout period: {}", selector.getValue(), e);
@@ -236,6 +235,7 @@ public class BaseAction {
 	public static void waitForNetworkIdle(Page page) {
 		try {
 			page.waitForLoadState(LoadState.NETWORKIDLE);
+			page.waitForLoadState(LoadState.DOMCONTENTLOADED);
 		} catch (Exception e) {
 			logger.error("Failed to wait for NETWORKIDLE state.", e);
 			throw e;
@@ -354,6 +354,7 @@ public class BaseAction {
 	// Retrieves the text content of an element and asserts the text matches the
 	public static String getText(Page page, Selector selector) {
 		try {
+			waitForElement(page, selector);
 			Locator locator = LocatorFactory.getLocator(page, selector);
 			return locator.textContent().trim();
 		} catch (PlaywrightException e) {
@@ -377,16 +378,9 @@ public class BaseAction {
 	public static List<String> split(String value) {
 		if (value == null || value.trim().isEmpty()) {
 		}
-		return Arrays.asList(value.split(","));
+		return Arrays.asList(value.split(";"));
 	}
-
-	// Method to split a string by comma and store in a List<String>
-	public static List<String> splitslash(String value) {
-		if (value == null || value.trim().isEmpty()) {
-		}
-		return Arrays.asList(value.split("/"));
-	}
-
+	
 	public static void listValidation(Page page, Selector selector, List<String> list) {
 		Locator locator = getLocator(page, selector);
 		if (locator.count() == list.size()) {
@@ -413,7 +407,6 @@ public class BaseAction {
 				+ menuName + "']";
 		waitForElement(page, new Selector(SelectorType.XPATH, menuItemXPath));
 		Locator menuItem = page.locator(menuItemXPath);
-		page.waitForLoadState(LoadState.NETWORKIDLE);
 		if (menuItem.count() == 0) {
 			System.out.println("Menu item not found: " + menuName);
 			return false;

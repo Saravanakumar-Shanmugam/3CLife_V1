@@ -1,6 +1,8 @@
 package com.actions;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -39,4 +41,15 @@ public class ExcelTestDataUtil {
 	public static Map<String, Map<String, String>> getOptionsData() {
 		return optionsData;
 	}
+	
+	public static List<String> getColumnNames(Map<String, Map<String, String>> data) {
+	    List<String> columnNamesSet = new ArrayList<>();
+
+	    if (data != null && !data.isEmpty()) {
+	    	columnNamesSet.addAll(data.keySet());
+	    }
+	    
+	    return columnNamesSet;
+	}
+
 }

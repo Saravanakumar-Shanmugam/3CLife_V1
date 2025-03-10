@@ -32,25 +32,25 @@ public class CommonElements {
 	public static Selector sameAsResidentialAddress = new Selector(SelectorType.XPATH,
 			"//label//span[contains(normalize-space(text()), 'same as the Residential Address?')]//parent::label//parent::div//parent::div//following-sibling::div");
 	public static Selector residenceStreet1 = new Selector(SelectorType.XPATH,
-			"//h3[contains(normalize-space(text()), 'Residence Address')]//parent::div//label//span[contains(normalize-space(text()),'Street Line 1')]//parent::label//parent::div//following-sibling::div//input");
+			"//h3[contains(normalize-space(text()), 'Residence Address')]//parent::div/following-sibling::div//label//span[contains(normalize-space(text()),'Street Line 1')]//parent::label//parent::div//following-sibling::div//input");
 	public static Selector residenceStreet2 = new Selector(SelectorType.XPATH,
-			"//h3[contains(normalize-space(text()), 'Residence Address')]//parent::div//label//span[contains(normalize-space(text()),'Street Line 2')]//parent::label//parent::div//following-sibling::div//input");
+			"//h3[contains(normalize-space(text()), 'Residence Address')]//parent::div/following-sibling::div//label//span[contains(normalize-space(text()),'Street Line 2')]//parent::label//parent::div//following-sibling::div//input");
 	public static Selector residenceState = new Selector(SelectorType.XPATH,
-			"(//h3[contains(normalize-space(text()), 'Residence Address')]//parent::div//label//span[contains(normalize-space(text()),'State')]//parent::label//parent::div//following-sibling::div//div)[1]");
+			"(//h3[contains(normalize-space(text()), 'Residence Address')]//parent::div/following-sibling::div//label//span[contains(normalize-space(text()),'State')]//parent::label//parent::div//following-sibling::div//div)[1]");
 	public static Selector residenceCity = new Selector(SelectorType.XPATH,
-			"//h3[contains(normalize-space(text()), 'Residence Address')]//parent::div//label//span[contains(normalize-space(text()),'City')]//parent::label//parent::div//following-sibling::div//input");
+			"//h3[contains(normalize-space(text()), 'Residence Address')]//parent::div/following-sibling::div//label//span[contains(normalize-space(text()),'City')]//parent::label//parent::div//following-sibling::div//input");
 	public static Selector residenceZipCode = new Selector(SelectorType.XPATH,
-			"//h3[contains(normalize-space(text()), 'Residence Address')]//parent::div//label//span[contains(normalize-space(text()),'Zip Code')]//parent::label//parent::div//following-sibling::div//input");
+			"//h3[contains(normalize-space(text()), 'Residence Address')]//parent::div/following-sibling::div//label//span[contains(normalize-space(text()),'Zip Code')]//parent::label//parent::div//following-sibling::div//input");
 	public static Selector mailingStreet1 = new Selector(SelectorType.XPATH,
-			"//h3[contains(normalize-space(text()), 'Mailing Address')]//parent::div//label//span[contains(normalize-space(text()),'Street Line 1')]//parent::label//parent::div//following-sibling::div//input");
+			"//h3[contains(normalize-space(text()), 'Mailing Address')]//parent::div/following-sibling::div//label//span[contains(normalize-space(text()),'Street Line 1')]//parent::label//parent::div//following-sibling::div//input");
 	public static Selector mailingStreet2 = new Selector(SelectorType.XPATH,
-			"//h3[contains(normalize-space(text()), 'Mailing Address')]//parent::div//label//span[contains(normalize-space(text()),'Street Line 2')]//parent::label//parent::div//following-sibling::div//input");
+			"//h3[contains(normalize-space(text()), 'Mailing Address')]//parent::div/following-sibling::div//label//span[contains(normalize-space(text()),'Street Line 2')]//parent::label//parent::div//following-sibling::div//input");
 	public static Selector mailingState = new Selector(SelectorType.XPATH,
-			"(//h3[contains(normalize-space(text()), 'Mailing Address')]//parent::div//label//span[contains(normalize-space(text()),'State')]//parent::label//parent::div//following-sibling::div//div)[1]");
+			"(//h3[contains(normalize-space(text()), 'Mailing Address')]//parent::div/following-sibling::div//label//span[contains(normalize-space(text()),'State')]//parent::label//parent::div//following-sibling::div//div)[1]");
 	public static Selector mailingCity = new Selector(SelectorType.XPATH,
-			"//h3[contains(normalize-space(text()), 'Mailing Address')]//parent::div//label//span[contains(normalize-space(text()),'City')]//parent::label//parent::div//following-sibling::div//input");
+			"//h3[contains(normalize-space(text()), 'Mailing Address')]//parent::div/following-sibling::div//label//span[contains(normalize-space(text()),'City')]//parent::label//parent::div//following-sibling::div//input");
 	public static Selector mailingZipCode = new Selector(SelectorType.XPATH,
-			"//h3[contains(normalize-space(text()), 'Mailing Address')]//parent::div//label//span[contains(normalize-space(text()),'Zip Code')]//parent::label//parent::div//following-sibling::div//input");
+			"//h3[contains(normalize-space(text()), 'Mailing Address')]//parent::div/following-sibling::div//label//span[contains(normalize-space(text()),'Zip Code')]//parent::label//parent::div//following-sibling::div//input");
 
 	public static Selector bannerTitle = new Selector(SelectorType.XPATH,
 			"//div[@class='clife-dashboard bg-white']//div[contains(@class,'dashboard-header')]/span[@class='dashboard-title']");

@@ -24,12 +24,12 @@ public class CreateApplication {
 			BaseAction.logStepAndClick(page, "Click 'Create new application' button",
 					CreateApplicationPopup.createApplicationButton);
 			BaseAction.validateElementState(page, CreateApplicationPopup.startApplicationButton, true, "enabled");
-			logger.info("Select " + rowData.get("Owner Resident State") + " for State");
-			BaseAction.drSelection(page, CreateApplicationPopup.stateDropdown,rowData.get("State"));
+			logger.info("Select " + rowData.get("Application_State") + " for State");
+			BaseAction.drSelection(page, CreateApplicationPopup.stateDropdown,rowData.get("Application_State"));
 			BaseAction.logStepAndClick(page, "Click 'Start Application' button",
 					CreateApplicationPopup.startApplicationButton);
 			BaseAction.waitForNetworkIdle(page);
-			BaseAction.verifyNavigationSuccess(page, "agent-detail-page", 30000);
+			BaseAction.verifyNavigationSuccess(page, "agent-detail-page", ConfigReader.getTimeout());
 		} catch (Exception e) {
 			ErrorHandler.handleError("Create Application action", e, page);
 		}
@@ -40,7 +40,7 @@ public class CreateApplication {
 			if (page.url().equals(ConfigReader.getBaseURL())) {
 				LoginPageActions.login(page);
 			}
-			page.locator("(//div[@id='row-0']/div/div)[1]").click();
+			page.locator("(//div[@id='row-1']/div/div)[1]").click();
 		} catch (Exception e) {
 			ErrorHandler.handleError("Create Application action", e, page);
 		}

@@ -26,14 +26,13 @@ public class Joint_Annuitant_Runner extends AbstractRunner{
 	@Feature("Joint Annuitant  Information Positive Flow")
 	public void ownerInformation() {
 		try { 
-			Map<String, String> rowData = ExcelTestDataUtil.getData().get("TestCase-No:1");  
+			Map<String, String> rowData = ExcelTestDataUtil.getData().get("TestCase-No:4");  
 			CreateApplication createApplication = new CreateApplication();
 //			Method createMethod = CreateApplication.class.getMethod("createApplicationPopup", Page.class,Map.class);
 			Method createMethod = CreateApplication.class.getMethod("name", Page.class, Map.class);
 
 			Joint_Annuitant_Action product = new Joint_Annuitant_Action();
-//			Method productmethod = Joint_Annuitant_Action.class.getMethod("jointAnnuitantFlow", Page.class, Map.class);
-			Method productmethod = Joint_Annuitant_Action.class.getMethod("name", Page.class, Map.class);
+			Method productmethod = Joint_Annuitant_Action.class.getMethod("jointAnnuitantFlow", Page.class, Map.class);
 
 			logger.info("Method taken from the createapplication and the method name is " + createMethod);
 			

@@ -3,6 +3,7 @@ package com.actions;
 import java.util.Map;
 
 import com.base.BaseAction;
+import com.config.ConfigReader;
 import com.constants.AppConstants;
 import com.microsoft.playwright.Page;
 import com.page.Annuitant_Page;
@@ -13,57 +14,34 @@ import com.utils.ErrorHandler;
 
 public class Joint_Annuitant_Action {
 
-	public static void jointAnnuitantFlow(Page page, Map<String, String> rowData) {
+	public static void jointAnnuitan(Page page, Map<String, String> rowData) {
 		try {
-			AllureUtils.logStep("proceeding with Joint Annuitant Information ");
 			if (rowData.get("Plan Type").equalsIgnoreCase("Non-Qualified")) {
-				page.waitForFunction("element => element.getAttribute('style') === 'background-color: white;'",
-						page.locator(Annuitant_Page.isThereJointAnnuitantQuestion).elementHandle());
-				BaseAction.selectByValue(page, Annuitant_Page.isThereJointAnnuitant,
-						rowData.get("Is there a Joint Annuitant"));
-				if (rowData.get("Is there a Joint Annuitant").equalsIgnoreCase(AppConstants.YES)) {
-					BaseAction.selectByValue(page, Annuitant_Page.jointAnnuitantOwnerOrJointOwner,
-							rowData.get("Joint Annuitant the Owner or Joint Owner"));
-					if (rowData.get("Joint Annuitant the Owner or Joint Owner").toLowerCase()
-							.equalsIgnoreCase("Yes, the Owner")) {
-						BaseAction.selectByValue(page, Annuitant_Page.jointAnnuitantSameOwner,
-								rowData.get("Joint Annuitant Same as Owner"));
-					} else if (rowData.get("Joint Annuitant the Owner or Joint Owner").toLowerCase()
-							.equalsIgnoreCase("Yes, the Joint Owner")) {
-						BaseAction.selectByValue(page, Annuitant_Page.jointAnnuitantOwnerOrJointOwner,
-								rowData.get("Joint Annuitant Same as Joint Owner"));
-					} else if (rowData.get("Joint Annuitant the Owner or Joint Owner").toLowerCase()
-							.contains(AppConstants.NO.toLowerCase())) {
-
-					
-				BaseAction.clickElement(page, CommonElements.next);
-				page.waitForFunction("element => element.getAttribute('style') === 'background-color: white;'",
-						page.locator(Annuitant_Page.valAnnuitantUSCitizen).elementHandle());
-						BaseAction.selectByValue(page, Annuitant_Page.annuitantUSCitizen,
-								rowData.get("Joint_Annuitant a US citizen"));
-						if (AppConstants.NO.equalsIgnoreCase(rowData.get("Joint_Annuitant a US citizen"))) {
-							page.waitForTimeout(2000);
-							BaseAction.isTextPresent(page, Owner_Page.productAvailablePara,
-									AppConstants.US_ONLY_JOINT_ANNUITANT_MESSAGE);
-						}
-						fillAnnuitantDetails(page, rowData);
-						fillResidentialAddress(page, rowData);
-						BaseAction.selectByValue(page, CommonElements.sameAsResidentialAddress,
-								rowData.get("Joint_Annuitant_same as the Residential Address"));
-						if (AppConstants.NO
-								.equalsIgnoreCase(rowData.get("Joint_Annuitant_same as the Residential Address"))) {
-							fillMailingAddress(page, rowData);
-						}
+				AllureUtils.logStep("proceeding with Joint Annuitant Information ");
+				BaseAction.selectByValue(page, Annuitant_Page.jointAnnuitantSameOwner,
+						rowData.get("Joint Annuitant Same as Owner"));
+				if (rowData.get("Joint Annuitant Same as Owner").toLowerCase()
+						.contains(AppConstants.NO.toLowerCase())) {
+					BaseAction.clickElement(page, CommonElements.next);
+					page.waitForFunction("element => element.getAttribute('style') === 'background-color: white;'",
+							page.locator(Annuitant_Page.valAnnuitantUSCitizen).elementHandle());
+					BaseAction.selectByValue(page, Annuitant_Page.annuitantUSCitizen,
+							rowData.get("Joint_Annuitant a US citizen"));
+					if (AppConstants.NO.equalsIgnoreCase(rowData.get("Joint_Annuitant a US citizen"))) {
+						page.waitForTimeout(2000);
+						BaseAction.isTextPresent(page, Owner_Page.productAvailablePara,
+								AppConstants.US_ONLY_JOINT_ANNUITANT_MESSAGE);
+					}
+					fillAnnuitantDetails(page, rowData);
+					fillResidentialAddress(page, rowData);
+					BaseAction.selectByValue(page, CommonElements.sameAsResidentialAddress,
+							rowData.get("Joint_Annuitant_same as the Residential Address"));
+					if (AppConstants.NO
+							.equalsIgnoreCase(rowData.get("Joint_Annuitant_same as the Residential Address"))) {
+						fillMailingAddress(page, rowData);
 					}
 				}
 			}
-			
-			BaseAction.selectByValue(page, Annuitant_Page.jointAnnuitantSameOwner,
-					rowData.get("Joint Annuitant Same as Owner"));
-			
-			BaseAction.clickElement(page, CommonElements.next);
-//			name(page, rowData);
-			
 		} catch (Exception e) {
 			ErrorHandler.handleError("Joint Annuitant Section..", e, page);
 		}
@@ -92,7 +70,7 @@ public class Joint_Annuitant_Action {
 		BaseAction.fillInputField(page, CommonElements.residenceStreet1,
 				rowData.get("Joint_Annuitant_Residence_Street 1"));
 		BaseAction.drSelectionContain(page, rowData.get("Joint_Annuitant_Residence_City"));
-		page.waitForTimeout(2000);
+		page.waitForTimeout(ConfigReader.getTimeout());
 		BaseAction.fillInputField(page, CommonElements.residenceStreet2,
 				rowData.get("Joint_Annuitant_Residence_Street 2"));
 		BaseAction.isTextPresent(page, CommonElements.residenceState, rowData.get("Joint_Annuitant_Residence_State"));
@@ -104,31 +82,42 @@ public class Joint_Annuitant_Action {
 	private static void fillMailingAddress(Page page, Map<String, String> rowData) {
 		BaseAction.fillInputField(page, CommonElements.mailingStreet1, rowData.get("Joint_Annuitant_Mailing_Street 1"));
 		BaseAction.drSelectionContain(page, rowData.get("Joint_Annuitant_Mailing_City"));
-		page.waitForTimeout(2000);
+		page.waitForTimeout(ConfigReader.getTimeout());
 		BaseAction.fillInputField(page, CommonElements.mailingStreet2, rowData.get("Joint_Annuitant_Mailing_Street 2"));
 		BaseAction.isTextPresent(page, CommonElements.mailingState, rowData.get("Joint_Annuitant_Mailing_State"));
 		BaseAction.isTextPresent(page, CommonElements.mailingCity, rowData.get("Joint_Annuitant_Mailing_City"));
 		BaseAction.isTextPresent(page, CommonElements.mailingZipCode, rowData.get("Joint_Annuitant_Mailing_Zip Code"));
 	}
-	
-	public static void name(Page page, Map<String, String> rowData) {
+
+	public static void trustjointAnnuitan(Page page, Map<String, String> rowData) {
 		page.waitForFunction("element => element.getAttribute('style') === 'background-color: white;'",
 				page.locator(Annuitant_Page.valAnnuitantUSCitizen).elementHandle());
-				BaseAction.selectByValue(page, Annuitant_Page.annuitantUSCitizen,
-						rowData.get("Joint_Annuitant a US citizen"));
-				if (AppConstants.NO.equalsIgnoreCase(rowData.get("Joint_Annuitant a US citizen"))) {
-					page.waitForTimeout(2000);
-					BaseAction.isTextPresent(page, Owner_Page.productAvailablePara,
-							AppConstants.US_ONLY_JOINT_ANNUITANT_MESSAGE);
-				}
-				fillAnnuitantDetails(page, rowData);
-				fillResidentialAddress(page, rowData);
-				BaseAction.selectByValue(page, CommonElements.sameAsResidentialAddress,
-						rowData.get("Joint_Annuitant_same as the Residential Address"));
-				if (AppConstants.NO
-						.equalsIgnoreCase(rowData.get("Joint_Annuitant_same as the Residential Address"))) {
-					fillMailingAddress(page, rowData);
-				}
-				BaseAction.clickElement(page, CommonElements.next);
+		BaseAction.selectByValue(page, Annuitant_Page.annuitantUSCitizen, rowData.get("Joint_Annuitant a US citizen"));
+		if (AppConstants.NO.equalsIgnoreCase(rowData.get("Joint_Annuitant a US citizen"))) {
+			page.waitForTimeout(ConfigReader.getTimeout());
+			BaseAction.isTextPresent(page, Owner_Page.productAvailablePara,
+					AppConstants.US_ONLY_JOINT_ANNUITANT_MESSAGE);
+		}
+		fillAnnuitantDetails(page, rowData);
+		fillResidentialAddress(page, rowData);
+		BaseAction.selectByValue(page, CommonElements.sameAsResidentialAddress,
+				rowData.get("Joint_Annuitant_same as the Residential Address"));
+		if (AppConstants.NO.equalsIgnoreCase(rowData.get("Joint_Annuitant_same as the Residential Address"))) {
+			fillMailingAddress(page, rowData);
+		}
+	}
+
+	public static void jointAnnuitantFlow(Page page, Map<String, String> rowData) {
+		page.waitForFunction("element => element.getAttribute('style') === 'background-color: white;'",
+				page.locator(Annuitant_Page.isThereJointAnnuitantQuestion).elementHandle());
+		BaseAction.selectByValue(page, Annuitant_Page.isThereJointAnnuitant, rowData.get("Is there a Joint Annuitant"));
+		if (rowData.get("Is there a Joint Annuitant").equalsIgnoreCase(AppConstants.YES)) {
+			if (rowData.get("Type of Ownership").equalsIgnoreCase("Trust")) {
+				trustjointAnnuitan(page, rowData);
+			} else {
+				jointAnnuitan(page, rowData);
+			}
+		}
+		BaseAction.clickElement(page, CommonElements.next);
 	}
 }

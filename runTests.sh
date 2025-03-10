@@ -6,11 +6,17 @@ cd "$(dirname "$0")"
 
 # Run Playwright tests
 echo "Running Playwright tests..."
-mvn clean test -Dsurefire.failIfNoTests=false -DtestFailureIgnore=true
+mvn clean test -Dtest=com.runner.TestSuiteRunner -Dsurefire.failIfNoTests=false -DtestFailureIgnore=true
 
 # Verify if test results exist
-if [ ! -d "allure-results" ] || [ -z "$(ls -A allure-results)" ]; then
-    echo "Error: No Allure test results found!"
+if [ ! -d "allure-results" ] || [ "$(find allure-results -type f | wc -l)" -eq 0 ]; then
+    echo "❌ Error: No Allure test results found!"
+    exit 1
+fi
+
+# Check if Allure CLI is installed
+if ! which allure > /dev/null 2>&1; then
+    echo "❌ Error: Allure CLI is not installed or not in PATH. Please install it."
     exit 1
 fi
 
@@ -18,14 +24,24 @@ fi
 echo "Generating Allure report..."
 allure generate --clean allure-results -o allure-report
 
-# Set Jenkins Report URL
-JENKINS_URL="http://localhost:8080/job/sample/allure-report"
+# Get GitHub Actions Job URL
+GITHUB_RUN_URL="https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
 
-# Replace {REPORT_URL} placeholder in email body
-sed -i "s|{REPORT_URL}|$JENKINS_URL|g" src/main/resources/application.properties
+# Ensure application.properties exists before modifying
+if [ ! -f "src/main/resources/application.properties" ]; then
+    echo "❌ Error: application.properties file not found!"
+    exit 1
+fi
+
+# Replace {REPORT_URL} placeholder in application.properties (cross-platform)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    sed -i '' "s|{REPORT_URL}|$GITHUB_RUN_URL|g" src/main/resources/application.properties
+else
+    sed -i "s|{REPORT_URL}|$GITHUB_RUN_URL|g" src/main/resources/application.properties
+fi
 
 # Send email using EmailSender class from com.utils package
-echo "Sending email..."
-mvn exec:java -Dexec.mainClass="com.utils.EmailSender"
+echo "Sending email with report link: $GITHUB_RUN_URL"
+mvn exec:java -Dexec.mainClass="com.utils.EmailSender" -Dexec.classpathScope=test -Dexec.args="$GITHUB_RUN_URL"
 
 echo "✅ Test execution and reporting completed!"

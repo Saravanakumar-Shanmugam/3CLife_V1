@@ -3,6 +3,7 @@ package com.actions;
 import java.util.Map;
 
 import com.base.BaseAction;
+import com.config.ConfigReader;
 import com.constants.AppConstants;
 import com.microsoft.playwright.Page;
 import com.page.Annuitant_Page;
@@ -13,9 +14,11 @@ import com.utils.ErrorHandler;
 
 public class Annuitant_Actions {
 
-	public static void annuitantFlow(Page page, Map<String, String> rowData) {
+	public static void annuitant(Page page, Map<String, String> rowData) {
 		try {
 			AllureUtils.logStep("proceeding with Annuitant Information ");
+			page.waitForFunction("element => element.getAttribute('style') === 'background-color: white;'",
+					page.locator(Annuitant_Page.valAnnuitantSameOwner).elementHandle());
 			BaseAction.selectByValue(page, Annuitant_Page.annuitantSameOwner, rowData.get("Annuitant same Owner"));
 			if (rowData.get("Annuitant same Owner").toLowerCase().contains(AppConstants.NO.toLowerCase())) {
 				BaseAction.clickElement(page, CommonElements.next);
@@ -27,7 +30,7 @@ public class Annuitant_Actions {
 				BaseAction.selectByValue(page, Annuitant_Page.annuitantUSCitizen,
 						rowData.get("Annuitant a US citizen"));
 				if (AppConstants.NO.equalsIgnoreCase(rowData.get("Annuitant a US citizen"))) {
-					page.waitForTimeout(2000);
+					page.waitForTimeout(ConfigReader.getTimeout());
 					BaseAction.isTextPresent(page, Owner_Page.productAvailablePara,
 							AppConstants.US_ONLY_ANNUITANT_MESSAGE);
 				}
@@ -67,7 +70,7 @@ public class Annuitant_Actions {
 	private static void fillResidentialAddress(Page page, Map<String, String> rowData) {
 		BaseAction.fillInputField(page, CommonElements.residenceStreet1, rowData.get("Annuitant_Residence_Street 1"));
 		BaseAction.drSelectionContain(page, rowData.get("Annuitant_Residence_City"));
-		page.waitForTimeout(2000);
+		page.waitForTimeout(ConfigReader.getTimeout());
 		BaseAction.fillInputField(page, CommonElements.residenceStreet2, rowData.get("Annuitant_Residence_Street 2"));
 		BaseAction.isTextPresent(page, CommonElements.residenceState, rowData.get("Annuitant_Residence_State"));
 		BaseAction.isTextPresent(page, CommonElements.residenceCity, rowData.get("Annuitant_Residence_City"));
@@ -77,10 +80,39 @@ public class Annuitant_Actions {
 	private static void fillMailingAddress(Page page, Map<String, String> rowData) {
 		BaseAction.fillInputField(page, CommonElements.mailingStreet1, rowData.get("Annuitant_Mailing_Street 1"));
 		BaseAction.drSelectionContain(page, rowData.get("Annuitant_Mailing_City"));
-		page.waitForTimeout(2000);
+		page.waitForTimeout(ConfigReader.getTimeout());
 		BaseAction.fillInputField(page, CommonElements.mailingStreet2, rowData.get("Annuitant_Mailing_Street 2"));
 		BaseAction.isTextPresent(page, CommonElements.mailingState, rowData.get("Annuitant_Mailing_State"));
 		BaseAction.isTextPresent(page, CommonElements.mailingCity, rowData.get("Annuitant_Mailing_City"));
 		BaseAction.isTextPresent(page, CommonElements.mailingZipCode, rowData.get("Annuitant_Mailing_Zip Code"));
+	}
+	
+	public static void trustAnnuitant(Page page, Map<String, String> rowData) {
+		page.waitForFunction("element => element.getAttribute('style') === 'background-color: white;'",
+				page.locator(Annuitant_Page.valAnnuitantUSCitizen).elementHandle());
+				BaseAction.selectByValue(page, Annuitant_Page.annuitantUSCitizen,
+						rowData.get("Annuitant a US citizen"));
+				if (AppConstants.NO.equalsIgnoreCase(rowData.get("Annuitant a US citizen"))) {
+					page.waitForTimeout(ConfigReader.getTimeout());
+					BaseAction.isTextPresent(page, Owner_Page.productAvailablePara,
+							AppConstants.US_ONLY_ANNUITANT_MESSAGE);
+				}
+				fillAnnuitantDetails(page, rowData);
+				fillResidentialAddress(page, rowData);
+				BaseAction.selectByValue(page, CommonElements.sameAsResidentialAddress,
+						rowData.get("same as the Residential Address"));
+				if (AppConstants.NO
+						.equalsIgnoreCase(rowData.get("same as the Residential Address"))) {
+					fillMailingAddress(page, rowData);
+				}
+				BaseAction.clickElement(page, CommonElements.next);
+	}
+	
+	public static void annuitantFlow(Page page, Map<String, String> rowData) {
+		if(rowData.get("Type of Ownership").equalsIgnoreCase("Trust")) {
+			trustAnnuitant(page, rowData);
+		}else {
+			annuitant(page, rowData);
+		}
 	}
 }

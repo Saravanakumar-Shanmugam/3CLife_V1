@@ -1,7 +1,6 @@
 com\utils\EmailSender.class
 com\utils\ErrorHandler.class
 com\base\AbstractRunner.class
-com\utils\EmailReportSender.class
 com\config\PlaywrightConfig.class
 com\constants\AppConstants.class
 com\utils\ExcelReader$1.class
@@ -11,7 +10,6 @@ com\utils\EmailSender$1.class
 com\utils\ExcelReader.class
 com\selectors\LocatorFactory$1.class
 com\base\BaseAction.class
-com\utils\EmailReportSender$1.class
 com\selectors\LocatorFactory.class
 com\selectors\Selector.class
 com\utils\AllureUtils.class

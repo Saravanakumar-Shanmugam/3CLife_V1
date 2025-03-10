@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.base.BaseAction;
+import com.config.ConfigReader;
 import com.constants.AppConstants;
 import com.microsoft.playwright.Page;
 import com.page.CommonElements;
@@ -21,17 +22,21 @@ public class Started_Product {
 		try {
 			logger.info("proceeding with Let's Get Started / Product section");
 			AllureUtils.logStep("proceeding with Let's Get Started / Product section");
+			page.waitForTimeout(ConfigReader.getTimeout());
+			BaseAction.waitForNetworkIdle(page);
 			boolean notCompleted = BaseAction.isMenuCompleted(page, "Product");
 			BaseAction.assertTrueCondition(notCompleted == false, "section is not completed.");
 			BaseAction.waitForElement(page, CommonElements.bannerTitle);
-			BaseAction.listValidation(page, CommonElements.bannerTitle, BaseAction.split(rowData.get("Dashboard-title")));
+			BaseAction.listValidation(page, CommonElements.bannerTitle,
+					BaseAction.split(rowData.get("Dashboard-title")));
 			BaseAction.waitForElement(page, com.page.Started_Product.productDropdown);
-			BaseAction.drSelection(page, com.page.Started_Product.productDropdown, rowData.get("Product Type"));
+			page.waitForFunction("element => element.getAttribute('style') === 'background-color: white;'",
+					page.locator(com.page.Started_Product.termSelectionDropdownQ).elementHandle());
+//			BaseAction.drSelection(page, com.page.Started_Product.productDropdown, rowData.get("Product Type"));
 			BaseAction.drSelection(page, com.page.Started_Product.termSelectionDropdown, rowData.get("Term Selection"));
 			if (rowData.get("Resubmitted or Replaced").equalsIgnoreCase(AppConstants.YES)) {
 				BaseAction.fillInputField(page, com.page.Started_Product.policyNumber, "001002");
 			}
-
 			String TypeofOwnership = rowData.get("Type of Ownership");
 			BaseAction.drSelection(page, com.page.Started_Product.typeOfOwnershipDropdown, TypeofOwnership);
 			if (TypeofOwnership.equalsIgnoreCase("Other Entity")) {
@@ -62,17 +67,30 @@ public class Started_Product {
 							BaseAction.split(rowData.get("Writing_Agent_Code")).get(i), i);
 					BaseAction.fillInputFieldByIndex(page, com.page.Started_Product.agentFirstName,
 							BaseAction.split(rowData.get("Writing Agent_First Name")).get(i), i);
+					BaseAction.fillInputFieldByIndex(page, com.page.Started_Product.agentMiddleName,
+							BaseAction.split(rowData.get("Writing Agent_First Name")).get(i), i);
 					BaseAction.fillInputFieldByIndex(page, com.page.Started_Product.agentLastName,
 							BaseAction.split(rowData.get("Writing Agent_Last Name")).get(i), i);
 					BaseAction.fillInputFieldByIndex(page, com.page.Started_Product.agentEmail,
 							BaseAction.split(rowData.get("Writing_Agent_Email_Address")).get(i), i);
 					BaseAction.fillInputFieldByIndex(page, com.page.Started_Product.Split, splitValues.get(i), i);
+//					if (i == 0) {
+//						BaseAction.isTextPresent(page, com.page.Started_Product.completedProductTrainingText,
+//								AppConstants.PRODUCT_TRAINING_REQUIRED);
+//						BaseAction.selectByValue(page, com.page.Started_Product.completedProductTraining, "No");
+//						BaseAction.isTextPresent(page, com.page.Started_Product.agentEOText,
+//								AppConstants.E_AND_O_REQUIRED);
+//						BaseAction.selectByValue(page, com.page.Started_Product.agentEO, "No");
+//						BaseAction.isTextPresent(page, com.page.Started_Product.currentAMLTrainingText,
+//								AppConstants.AML_TRAINING_REQUIRED);
+//						BaseAction.selectByValue(page, com.page.Started_Product.currentAMLTraining, "No");
+//					}
 					BaseAction.selectByValue(page, com.page.Started_Product.getSecondaryAgentOptions(i),
 							BaseAction.split(rowData.get("additional Agent")).get(i));
 				}
 			}
 			String totalvalue = BaseAction.getElementAttribute(page, com.page.Started_Product.totalSplit, "value");
-			BaseAction.assertTrueCondition(totalvalue.equalsIgnoreCase("100"), "Total Split % is " + totalvalue);
+			BaseAction.assertTrueCondition(totalvalue.equalsIgnoreCase("100%"), "Total Split % is " + totalvalue);
 			BaseAction.clickElement(page, CommonElements.next);
 		} catch (Exception e) {
 			ErrorHandler.handleError("Started_Product", e, page);
@@ -89,13 +107,14 @@ public class Started_Product {
 			ErrorHandler.handleError("Started_Product", e, page);
 		}
 	}
-	
+
 	public static void optionValidations(Page page, Map<String, String> rowData) {
 		try {
 			Map<String, String> data = ExcelTestDataUtil.getData().get("TestCase-No:1");
 			BaseAction.clickElement(page, com.page.Started_Product.termSelectionDropdown);
 			BaseAction.listValidation(page, BaseAction.options, BaseAction.split(rowData.get("Term Selection")));
-			BaseAction.listValidation(page, com.page.Started_Product.resubmittedApplicationYNOptions, BaseAction.split(rowData.get("Resubmitted or Replaced")));
+			BaseAction.listValidation(page, com.page.Started_Product.resubmittedApplicationYNOptions,
+					BaseAction.split(rowData.get("Resubmitted or Replaced")));
 			BaseAction.clickElement(page, com.page.Started_Product.typeOfOwnershipDropdown);
 			BaseAction.listValidation(page, BaseAction.options, BaseAction.split(rowData.get("Type of Ownership")));
 			BaseAction.selectByValue(page, BaseAction.options, data.get("Type of Ownership"));
@@ -103,7 +122,8 @@ public class Started_Product {
 			BaseAction.listValidation(page, BaseAction.options, BaseAction.split(rowData.get("Plan Type")));
 			BaseAction.clickElement(page, com.page.Started_Product.accountDesignation);
 			BaseAction.listValidation(page, BaseAction.options, BaseAction.split(rowData.get("Account Designation")));
-			BaseAction.listValidation(page, com.page.Started_Product.getSecondaryAgentOptions(0), BaseAction.split(rowData.get("additional Agent")));
+			BaseAction.listValidation(page, com.page.Started_Product.getSecondaryAgentOptions(0),
+					BaseAction.split(rowData.get("additional Agent")));
 		} catch (Exception e) {
 			ErrorHandler.handleError("Started_Product", e, page);
 		}

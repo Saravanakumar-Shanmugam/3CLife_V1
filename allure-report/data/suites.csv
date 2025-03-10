@@ -1,2 +1,0 @@
-"DESCRIPTION","DURATION IN MS","NAME","PARENT SUITE","START TIME","STATUS","STOP TIME","SUB SUITE","SUITE","TEST CLASS","TEST METHOD"
-"","21041","testLoginPagePositive()","","Fri Feb 21 17:52:44 IST 2025","passed","Fri Feb 21 17:53:06 IST 2025","","com.runner.LoginPageRunner","com.runner.LoginPageRunner","testLoginPagePositive"

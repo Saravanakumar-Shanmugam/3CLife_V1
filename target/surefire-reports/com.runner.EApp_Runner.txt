@@ -1,0 +1,14 @@
+-------------------------------------------------------------------------------
+Test set: com.runner.EApp_Runner
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 120.078 s <<< FAILURE! - in com.runner.EApp_Runner
+com.runner.EApp_Runner.ownerInformation  Time elapsed: 118.759 s  <<< FAILURE!
+java.lang.AssertionError: Error occurred while testing on browser: chromium
+	at org.junit.Assert.fail(Assert.java:89)
+	at com.utils.ErrorHandler.handleError(ErrorHandler.java:40)
+	at com.base.AbstractRunner.executeTestAcrossBrowsers(AbstractRunner.java:46)
+	at com.runner.EApp_Runner.ownerInformation(EApp_Runner.java:33)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+

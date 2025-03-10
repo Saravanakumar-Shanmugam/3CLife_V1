@@ -36,7 +36,7 @@ public class Funding_Page {
 	public static Selector surrenderingCompanyName =new Selector(SelectorType.XPATH, "//label//span[contains(normalize-space(),'Surrendering Company Name')]//parent::label//parent::div//following-sibling::div/input");
 	public static Selector companySearch =new Selector(SelectorType.XPATH, "//button[contains(normalize-space(),'Company Search')]");
 	public static Selector universalCarrierID =new Selector(SelectorType.XPATH, "//label//span[contains(normalize-space(),'Universal Carrier ID')]//parent::label//parent::div//following-sibling::div/input");
-	public static Selector universalLocationID =new Selector(SelectorType.XPATH, "//label//span[contains(normalize-space(),'1035YP UniversalLocationID')]//parent::label//parent::div//following-sibling::div/input");
+	public static Selector universalLocationID =new Selector(SelectorType.XPATH, "//label//span[contains(normalize-space(),'1035YP Universal Location ID')]//parent::label//parent::div//following-sibling::div/input");
 	public static Selector CompanyAddressLine1 =new Selector(SelectorType.XPATH, "//label//span[contains(normalize-space(),'Company Address Line 1')]//parent::label//parent::div//following-sibling::div//div//input");
 	public static Selector CompanyAddressLine2 =new Selector(SelectorType.XPATH, "//label//span[contains(normalize-space(),'Company Address Line 2')]//parent::label//parent::div//following-sibling::div//input");
 	public static Selector City =new Selector(SelectorType.XPATH, "//label//span[contains(normalize-space(),'City')]//parent::label//parent::div//following-sibling::div//input");
@@ -59,8 +59,5 @@ public class Funding_Page {
 	public static Selector checkThisBox =new Selector(SelectorType.XPATH, "//span[contains(text(),'Check this box')]//parent::label");
 	public static Selector ShrProcessingLocations =new Selector(SelectorType.XPATH, "//div[@class='list-header']//following-sibling::div//label");
 	public static Selector selectCompany =new Selector(SelectorType.XPATH, "//button[text()='SELECT COMPANY']");
-
-
-	
 	
 }

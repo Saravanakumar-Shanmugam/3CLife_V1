@@ -21,7 +21,7 @@ public class LoginPageActions {
 
 	public static void login(Page page) {
 		try {
-			if (page.url().equals(ConfigReader.getBaseURL())) {
+			if (page.url().equalsIgnoreCase(ConfigReader.getBaseURL().trim())) {
 				logger.info("Processing the login functionality...");
 				performLoginSteps(page);
 				BaseAction.verifyNavigationSuccess(page, AppConstants.LOGIN_BYPASS_URL_PATTERN,30000);
@@ -40,9 +40,9 @@ public class LoginPageActions {
 
 	private static void performLoginSteps(Page page) {
 		AllureUtils.logStep("Filling in Email");
-		BaseAction.fillInputField(page, LoginPage.emailInput, YamlConfigReader.getLoginEmail());
+		BaseAction.fillInputField(page, LoginPage.emailInput, System.getenv("EMAIL"));
 		AllureUtils.logStep("Filling in Password");
-		BaseAction.fillInputField(page, LoginPage.passwordInput, YamlConfigReader.getLoginPassword());
+		BaseAction.fillInputField(page, LoginPage.passwordInput, System.getenv("PASSWORD"));
 		AllureUtils.logStep("Clicking login button");
 		BaseAction.clickElement(page, LoginPage.loginInput);
 	}

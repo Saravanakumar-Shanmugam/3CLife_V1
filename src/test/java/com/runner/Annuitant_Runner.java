@@ -26,7 +26,7 @@ public class Annuitant_Runner extends AbstractRunner {
 	@Feature("Annuitant Information Positive Flow")
 	public void ownerInformation() {
 		try { 
-			Map<String, String> rowData = ExcelTestDataUtil.getData().get("TestCase-No:1"); 
+			Map<String, String> rowData = ExcelTestDataUtil.getData().get("TestCase-No:4"); 
 			CreateApplication createApplication = new CreateApplication();
 //			Method createMethod = CreateApplication.class.getMethod("createApplicationPopup", Page.class,Map.class);
 			Method createMethod = CreateApplication.class.getMethod("name", Page.class, Map.class);

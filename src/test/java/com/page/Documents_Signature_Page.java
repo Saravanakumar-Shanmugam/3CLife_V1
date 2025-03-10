@@ -13,6 +13,13 @@ public class Documents_Signature_Page {
 	public static Selector delete = new Selector(SelectorType.XPATH, "//div[text()='delete']");
 
 	// Signature
+	public static Selector city=new Selector(SelectorType.XPATH,"//label//span[contains(normalize-space(text()),'City')]//parent::label//parent::div//following-sibling::div/input");
+	public static Selector State=new Selector(SelectorType.XPATH,"//label//span[normalize-space(text())='State']//parent::label//parent::div//following-sibling::div");
+	public static Selector  reasonForSigning=new Selector(SelectorType.XPATH,"//label//span[contains(normalize-space(text()),'reason for signing')]//parent::label//parent::div//following-sibling::div");
+	public static Selector timePeriod = new Selector(SelectorType.XPATH, "//label//span[contains(normalize-space(text()),'Time period')]//parent::label//parent::div//following-sibling::div/input");
+	public static Selector explainReason = new Selector(SelectorType.XPATH, "//label//span[contains(normalize-space(text()),'Please explain the reason:')]//parent::label//parent::div//following-sibling::div/input");
+	
+	
 	public static Selector completeSignature = new Selector(SelectorType.XPATH, "//button[text()='Complete Signature']");
 	public static Selector signHere_SignatureLabels = new Selector(SelectorType.XPATH, "//div[contains(@class,'signature-status')]//div[span and button]//span");
 	public static Selector signHere_SignatureButtons = new Selector(SelectorType.XPATH, "//div[contains(@class,'signature-status')]//div[span and button]//button");
@@ -20,7 +27,7 @@ public class Documents_Signature_Page {
 
 	public static Selector Submit = new Selector(SelectorType.XPATH, "//button[text()='Submit']");
 
-	public static Selector docusignStart = new Selector(SelectorType.XPATH, "//span[text()='Next']//parent::button");
+	public static Selector docusignStart = new Selector(SelectorType.XPATH, "//span[text()='Start']//parent::button");
 	public static Selector docusignSign = new Selector(SelectorType.XPATH, "//div[contains(@class,'signature-tab-content')]");
 	public static Selector docusignFinish = new Selector(SelectorType.XPATH, "//button[text()='Finish']");
 

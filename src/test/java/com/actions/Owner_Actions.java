@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.base.BaseAction;
+import com.config.ConfigReader;
 import com.constants.AppConstants;
 import com.microsoft.playwright.Page;
 import com.page.CommonElements;
@@ -18,7 +19,7 @@ public class Owner_Actions {
 		page.waitForFunction("element => element.getAttribute('style') === 'background-color: white;'",
 				page.locator(Owner_Page.valCorporationorEntityUSBased).elementHandle());
 		BaseAction.selectByValue(page, Owner_Page.entityUSBased, rowData.get("Entity U.S. Based?"));
-		page.waitForTimeout(2000);
+		page.waitForTimeout(ConfigReader.getTimeout());
 		if (AppConstants.NO.equalsIgnoreCase(rowData.get("Entity U.S. Based?"))) {
 			BaseAction.isTextPresent(page, Owner_Page.productAvailablePara, AppConstants.US_ONLY_OWNER_MESSAGE);
 		}
@@ -45,15 +46,15 @@ public class Owner_Actions {
 
 	private static void fillResidentialAddress(Page page, Map<String, String> rowData) {
 		BaseAction.fillInputField(page, CommonElements.residenceStreet1, rowData.get("Owner_Residence_Street 1"));
-		page.waitForTimeout(2000);
+		page.waitForTimeout(ConfigReader.getTimeout());
 		BaseAction.drSelectionContain(page, rowData.get("Owner_Residence_City"));
-		page.waitForTimeout(2000);
+		page.waitForTimeout(ConfigReader.getTimeout());
 		BaseAction.fillInputField(page, CommonElements.residenceStreet2, rowData.get("Owner_Residence_Street 2"));
 		BaseAction.isTextPresent(page, CommonElements.residenceState, rowData.get("Owner_Residence_State"));
 		BaseAction.isTextPresent(page, CommonElements.residenceCity, rowData.get("Owner_Residence_City"));
 		BaseAction.isTextPresent(page, CommonElements.residenceZipCode, rowData.get("Owner_Residence_Zip Code"));
 		BaseAction.drSelection(page, Owner_Page.currentResidence, rowData.get("Owner_Current Residence"));
-		if ("Other".equalsIgnoreCase(rowData.get("Owner_Current Residence"))) {
+		if (AppConstants.OTHER.equalsIgnoreCase(rowData.get("Owner_Current Residence"))) {
 			BaseAction.fillInputField(page, Owner_Page.currentResidenceOther,
 					rowData.get("Owner_Current Residence Other"));
 		}
@@ -61,9 +62,9 @@ public class Owner_Actions {
 
 	private static void fillMailingAddress(Page page, Map<String, String> rowData) {
 		BaseAction.fillInputField(page, CommonElements.mailingStreet1, rowData.get("Owner_Mailing_Street 1"));
-		page.waitForTimeout(2000);
+		page.waitForTimeout(ConfigReader.getTimeout());
 		BaseAction.drSelectionContain(page, rowData.get("Owner_Mailing_City"));
-		page.waitForTimeout(2000);
+		page.waitForTimeout(ConfigReader.getTimeout());
 		BaseAction.fillInputField(page, CommonElements.mailingStreet2, rowData.get("Owner_Mailing_Street 2"));
 		BaseAction.isTextPresent(page, CommonElements.mailingState, rowData.get("Owner_Mailing_State"));
 		BaseAction.isTextPresent(page, CommonElements.mailingCity, rowData.get("Owner_Mailing_City"));
@@ -75,7 +76,7 @@ public class Owner_Actions {
 		page.waitForFunction("element => element.getAttribute('style') === 'background-color: white;'",
 				page.locator(Owner_Page.ownerUSCitizen).elementHandle());
 		BaseAction.selectByValue(page, Owner_Page.valOwnerUSCitizen, rowData.get("Owner US Citizen"));
-		page.waitForTimeout(2000);
+		page.waitForTimeout(ConfigReader.getTimeout());
 		if (AppConstants.NO.equalsIgnoreCase(rowData.get("Owner US Citizen"))) {
 			BaseAction.isTextPresent(page, Owner_Page.productAvailablePara, AppConstants.US_ONLY_OWNER_MESSAGE);
 		}
@@ -105,7 +106,7 @@ public class Owner_Actions {
 		} else {
 			BaseAction.typeInputField(page, Owner_Page.taxIDNumber, rowData.get("Tax ID Number"));
 		}
-		BaseAction.typeInputField(page, Owner_Page.trustFormationDate, rowData.get("Trust Formation Date"));
+		BaseAction.datePicker(page, Owner_Page.trustFormationDate, rowData.get("Trust Formation Date"));
 		BaseAction.typeInputField(page, Owner_Page.trustFullName, rowData.get("Trust Full Name"));
 		fillMailingAddress(page, rowData);
 		BaseAction.clickElement(page, CommonElements.next);
@@ -148,14 +149,14 @@ public class Owner_Actions {
 		BaseAction.fillInputField(page, CommonElements.emailAddress, rowData.get("Owner_Email Address"));
 		BaseAction.fillInputField(page, CommonElements.emailAddressConfirmation, rowData.get("Owner_Email Address"));
 		BaseAction.drSelection(page, Owner_Page.formOfIdentification, rowData.get("Owner_Form of Identification"));
-		if ("Other".equalsIgnoreCase(rowData.get("Owner_Form of Identification"))) {
+		if (AppConstants.OTHER.equalsIgnoreCase(rowData.get("Owner_Form of Identification"))) {
 			BaseAction.fillInputField(page, Owner_Page.formOfIdentificationother, rowData.get("Owner_Other"));
 		}
 		BaseAction.fillInputField(page, Owner_Page.numberOnIdentification,
 				rowData.get("Owner_Number on Identification"));
 		BaseAction.fillInputField(page, Owner_Page.stateCountryOfIssuance,
 				rowData.get("Owner_State / Country of Issuance"));
-		BaseAction.fillInputField(page, Owner_Page.identificationExpirationDate,
+		BaseAction.datePicker(page, Owner_Page.identificationExpirationDate,
 				rowData.get("Owner_Identification Expiration Date"));
 	}
 
@@ -171,7 +172,7 @@ public class Owner_Actions {
 				rowData.get("Owner_Guardian_Email Address"));
 		BaseAction.drSelection(page, Owner_Page.guardianFormOfIdentification,
 				rowData.get("Owner_Guardian_Form of Identification"));
-		if ("Other".equalsIgnoreCase(rowData.get("Owner_Guardian_Form of Identification"))) {
+		if (AppConstants.OTHER.equalsIgnoreCase(rowData.get("Owner_Guardian_Form of Identification"))) {
 			BaseAction.fillInputField(page, Owner_Page.guardianFormOfIdentificationother,
 					rowData.get("Owner_Guardian_Other"));
 		}
@@ -179,7 +180,7 @@ public class Owner_Actions {
 				rowData.get("Owner_Guardian_Number on Identification"));
 		BaseAction.fillInputField(page, Owner_Page.guardianStateCountryOfIssuance,
 				rowData.get("Owner_Guardian_State / Country of Issuance"));
-		BaseAction.fillInputField(page, Owner_Page.guardianIdentificationExpirationDate,
+		BaseAction.datePicker(page, Owner_Page.guardianIdentificationExpirationDate,
 				rowData.get("Owner_Guardian_Identification Expiration Date"));
 	}
 
@@ -197,7 +198,7 @@ public class Owner_Actions {
 						page.locator(Owner_Page.trustIdentificationType).elementHandle());
 			}
 			BaseAction.clickElement(page, CommonElements.next);
-			page.waitForTimeout(2000);
+			page.waitForTimeout(ConfigReader.getTimeout());
 			List<String> splitValues = BaseAction.split(rowData.get("Owner"));
 			BaseAction.listValidation(page, CommonElements.error, splitValues);
 		} catch (Exception e) {
@@ -229,7 +230,7 @@ public class Owner_Actions {
 			BaseAction.listValidation(page, BaseAction.options, BaseAction.split(rowData.get("Owner_Tax Status")));
 			BaseAction.clickElement(page, Owner_Page.formOfIdentification);
 			BaseAction.listValidation(page, BaseAction.options, BaseAction.split(rowData.get("Owner_Form of Identification")));
-			BaseAction.listValidation(page, Owner_Page.anotherLegalDocumentation, BaseAction.splitslash(rowData.get("Owner_Guardian / Power of Attorney Information")));
+			BaseAction.listValidation(page, Owner_Page.anotherLegalDocumentation, BaseAction.split(rowData.get("Owner_Guardian / Power of Attorney Information")));
 			BaseAction.clickElement(page, Owner_Page.currentResidence);
 			BaseAction.listValidation(page, BaseAction.options, BaseAction.split(rowData.get("Owner_Current Residence")));
 			BaseAction.listValidation(page, CommonElements.sameAsResidentialAddress, BaseAction.split(rowData.get("same as the Residential Address?")));

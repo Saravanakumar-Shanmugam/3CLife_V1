@@ -27,7 +27,7 @@ public class Owner_Runner extends AbstractRunner {
 	public void ownerInformation() {
 		try {
 
-			Map<String, String> rowData = ExcelTestDataUtil.getData().get("TestCase-No:1");
+			Map<String, String> rowData = ExcelTestDataUtil.getData().get("TestCase-No:3");
 
 			CreateApplication createApplication = new CreateApplication();
 //			Method createMethod = CreateApplication.class.getMethod("createApplicationPopup", Page.class,Map.class);

@@ -11,10 +11,8 @@ import com.actions.CreateApplication;
 import com.actions.ExcelTestDataUtil;
 import com.actions.Suitability_Action;
 import com.base.AbstractRunner;
-import com.constants.AppConstants;
 import com.microsoft.playwright.Page;
 import com.utils.ErrorHandler;
-import com.utils.ExcelReader;
 
 import io.qameta.allure.Feature;
 
@@ -26,9 +24,7 @@ public class Suitability_Runner extends AbstractRunner {
 	@Feature("Suitability Information Positive Flow")
 	public void ownerInformation() {
 		try {
-
-			Map<String, String> rowData = ExcelTestDataUtil.getData().get("TestCase-No:1");
-
+			Map<String, String> rowData = ExcelTestDataUtil.getData().get("TestCase-No:3");
 			CreateApplication createApplication = new CreateApplication();
 //			Method createMethod = CreateApplication.class.getMethod("createApplicationPopup", Page.class,Map.class);
 			Method createMethod = CreateApplication.class.getMethod("name", Page.class, Map.class);
@@ -43,7 +39,7 @@ public class Suitability_Runner extends AbstractRunner {
 			logger.info("Method taken from the createapplication and the method name is " + createMethod);
 			
 			Object[][] executionData = { { createApplication, createMethod, rowData },
-//					{ product, additionalInformation, rowData },
+					{ product, additionalInformation, rowData },
 					{ product, financialResources, rowData },
 					{ product, financialProfile, rowData },
 					{ product, Replacements, rowData },

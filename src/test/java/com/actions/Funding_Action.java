@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.base.BaseAction;
+import com.config.ConfigReader;
 import com.constants.AppConstants;
+import com.microsoft.playwright.Locator.WaitForOptions;
 import com.microsoft.playwright.Page;
 import com.page.CommonElements;
 import com.page.Funding_Page;
@@ -55,7 +57,7 @@ public class Funding_Action {
 						if (rowData.get("Payment Form").equalsIgnoreCase("ACH")) {
 							BaseAction.drSelection(page, Funding_Page.selectAccountOwner,
 									rowData.get("Select Account Owner"));
-							if (rowData.get("Select Account Owner").equalsIgnoreCase("Other")) {
+							if (rowData.get("Select Account Owner").equalsIgnoreCase(AppConstants.OTHER)) {
 								BaseAction.fillInputField(page, Funding_Page.accountOwnerName,
 										rowData.get("Account Owner Name"));
 								BaseAction.fillInputField(page, Funding_Page.accountOwnerEmail,
@@ -78,11 +80,12 @@ public class Funding_Action {
 						BaseAction.fillInputField(page, Funding_Page.surrenderingCompanyName,
 								rowData.get("Surrendering Company Name"));
 						BaseAction.clickElement(page, Funding_Page.companySearch);
-						BaseAction.waitForElement(page,  Funding_Page.ShrProcessingLocations);
+						page.waitForTimeout(ConfigReader.getTimeout());
+						BaseAction.waitForElement(page, Funding_Page.ShrProcessingLocations);
 						BaseAction.selectByValue(page, Funding_Page.ShrProcessingLocations,
 								rowData.get("Processing Locations"));
 						BaseAction.clickElement(page, Funding_Page.selectCompany);
-						page.waitForTimeout(5000);
+						page.waitForTimeout(ConfigReader.getTimeout());
 						BaseAction.waitForNetworkIdle(page);
 						BaseAction.isTextPresent(page, Funding_Page.universalCarrierID,
 								rowData.get("Universal Carrier ID"));
@@ -132,6 +135,7 @@ public class Funding_Action {
 						}
 					}
 					BaseAction.clickElement(page, CommonElements.save);
+					BaseAction.waitForNetworkIdle(page);
 //					BaseAction.drSelection(page, Funding_Page.initiatedthereplacement,
 //							rowData.get("initiated the replacement process"));
 				}

@@ -44,7 +44,7 @@ public class Beneficiaries_Actions {
 				BaseAction.fillInputField(page, CommonElements.lastName,
 						BaseAction.split(rowData.get("Person_Last Name")).get(Person));
 				if(BaseAction.split(rowData.get("Person_Suffix")).size()-1>=Person) {
-				BaseAction.fillInputField(page, CommonElements.suffix,
+				BaseAction.drSelection(page, CommonElements.suffix,
 						BaseAction.split(rowData.get("Person_Suffix")).get(Person));
 				}
 				BaseAction.datePicker(page, CommonElements.dateOfBirth,
@@ -89,7 +89,7 @@ public class Beneficiaries_Actions {
 						BaseAction.split(rowData.get("Entity_Percentage")).get(Entity));
 				BaseAction.fillInputField(page, Beneficiaries_Page.fullName,
 						BaseAction.split(rowData.get("Entity_Full Name")).get(Entity));
-				BaseAction.selectByValue(page, Beneficiaries_Page.identificationType,
+				BaseAction.selectByValueContain(page, Beneficiaries_Page.identificationType,
 						BaseAction.split(rowData.get("Entity_Identification Type")).get(Entity));
 				if ("Social Security Number"
 						.equalsIgnoreCase(BaseAction.split(rowData.get("Entity_Identification Type")).get(Entity))) {
