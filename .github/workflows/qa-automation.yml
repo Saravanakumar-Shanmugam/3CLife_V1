@@ -4,7 +4,7 @@ on:
   workflow_dispatch:  # Allows manual trigger
 
 permissions:
-  contents: read
+  contents: write  # ✅ Allows committing results to the main branch
   pages: write
   id-token: write
 
@@ -73,6 +73,16 @@ jobs:
           exit 1
         fi
 
+    - name: Commit Allure Results and Report to Main
+      run: |
+        cd 3CLife_V1
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        git checkout main  # Ensure we're on main branch
+        git add allure-results allure-report
+        git commit -m "📝 Update Allure results & report - $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+        git push origin main || echo "No changes to push"
+
     - name: Upload Allure Report Artifact
       uses: actions/upload-artifact@v4
       with:
@@ -85,7 +95,7 @@ jobs:
         branch: gh-pages
         folder: 3CLife_V1/allure-report
         clean: true  # Remove old files before deploying
-        commit-message: "Deploy Allure Report - $(date '+%Y-%m-%d %H:%M:%S')"  # ✅ Adds timestamp
+        commit-message: "🚀 Deploy Allure Report - $(date '+%Y-%m-%d %H:%M:%S')"
 
     - name: Share GitHub Pages Link
       run: |
