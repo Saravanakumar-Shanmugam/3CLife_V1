@@ -28,7 +28,7 @@ public class Consents_Remarks_Runner extends AbstractRunner {
 
 			CreateApplication createApplication = new CreateApplication();
 //			Method createMethod = CreateApplication.class.getMethod("createApplicationPopup", Page.class,Map.class);
-			Method createMethod = CreateApplication.class.getMethod("name", Page.class, Map.class);
+			Method createMethod = CreateApplication.class.getMethod("firstRowSelection", Page.class, Map.class);
 
 			Consents_Remarks_Actions product = new Consents_Remarks_Actions();
 			Method Consents = Consents_Remarks_Actions.class.getMethod("Consents", Page.class, Map.class);

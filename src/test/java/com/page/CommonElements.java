@@ -5,6 +5,11 @@ import com.selectors.SelectorType;
 
 public class CommonElements {
 
+	public static Selector identificationType = new Selector(SelectorType.XPATH,
+			"//label//span[normalize-space(text())='Identification Type']//parent::label//parent::div//following-sibling::div/label");
+	public static Selector taxIDNumber = new Selector(SelectorType.XPATH,
+			"//label//span[normalize-space(text())='Tax ID Number']//parent::label//parent::div//following-sibling::div/input");
+
 	public static Selector dateOfBirth = new Selector(SelectorType.XPATH,
 			"//label//span[normalize-space(text())='Date of Birth']//parent::label//parent::div//following-sibling::div/div/input");
 	public static Selector gender = new Selector(SelectorType.XPATH,
@@ -58,7 +63,8 @@ public class CommonElements {
 			"//div[@class='clife-dashboard bg-white']//div[contains(@class,'dashboard-header')]/span[@class='dashboard-items']");
 
 	public static Selector back = new Selector(SelectorType.XPATH, "//div//button[text()='Back']");
-	public static Selector next = new Selector(SelectorType.XPATH, "//div//button[text()='Next']");
+//	public static Selector next = new Selector(SelectorType.XPATH, "//div//button[text()='Next']");
+	public static Selector Proceed = new Selector(SelectorType.XPATH, "//div//button[text()='Proceed']");
 	public static Selector error = new Selector(SelectorType.CLASS, "message-block");
 	public static Selector backToAppList = new Selector(SelectorType.CLASS, "back-icon");
 	public static Selector save = new Selector(SelectorType.XPATH, "//div//button[text()='Save']");

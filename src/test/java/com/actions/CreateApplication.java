@@ -35,7 +35,7 @@ public class CreateApplication {
 		}
 	}
 
-	public static void name(Page page, Map<String, String> rowData) {
+	public static void firstRowSelection(Page page, Map<String, String> rowData) {
 		try {
 			if (page.url().equals(ConfigReader.getBaseURL())) {
 				LoginPageActions.login(page);

@@ -25,11 +25,11 @@ public class Funding_Runner extends AbstractRunner {
 	@Feature("Beneficiaries Information Positive Flow")
 	public void ownerInformation() {
 		try { 
-			Map<String, String> rowData = ExcelTestDataUtil.getData().get("TestCase-No:4");
+			Map<String, String> rowData = ExcelTestDataUtil.getData().get("TestCase-No:3");
 
 			CreateApplication createApplication = new CreateApplication();
 //			Method createMethod = CreateApplication.class.getMethod("createApplicationPopup", Page.class,Map.class);
-			Method createMethod = CreateApplication.class.getMethod("name", Page.class, Map.class);
+			Method createMethod = CreateApplication.class.getMethod("firstRowSelection", Page.class, Map.class);
 
 			Funding_Action product = new Funding_Action();
 			Method fundingFlow = Funding_Action.class.getMethod("fundingFlow", Page.class, Map.class);

@@ -55,7 +55,6 @@ public class PlaywrightConfig {
         AllureUtils.attachEnvironmentInfo();
         AllureUtils.addExecutorsInfo();
         browser.set(browserInstance);
-
         return page;
     }
 
@@ -75,7 +74,7 @@ public class PlaywrightConfig {
 
     private static void setupContextOptions(Browser.NewContextOptions contextOptions) {
         if (ConfigReader.isHeadlessMode()) {
-            contextOptions.setRecordVideoDir(Paths.get(AppConstants.VIDEO_DIR_KEY, "videos/"))
+            contextOptions.setRecordVideoDir(Paths.get(AppConstants.VIDEO_DIR_KEY))
                     .setRecordVideoSize(1280, 720);
         }
 
@@ -100,7 +99,7 @@ public class PlaywrightConfig {
     }
 
     private static void navigateToInitialPage() {
-        String baseUrl = ConfigReader.getBaseURL();
+        String baseUrl = ConfigReader.getBaseURL().trim();
         if (authStateExists) {
             BaseAction.navigate(page, baseUrl + AppConstants.LOGIN_BYPASS_URL_PATTERN);
         } else {
@@ -133,9 +132,5 @@ public class PlaywrightConfig {
         } catch (Exception e) {
             logger.error("Error during " + resourceName + " cleanup: " + e.getMessage(), e);
         }
-    }
-
-    public static String getBaseURL() {
-        return ConfigReader.getBaseURL();
     }
 }

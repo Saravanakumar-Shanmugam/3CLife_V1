@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import com.base.BaseAction;
 import com.config.ConfigReader;
-import com.config.YamlConfigReader;
 import com.constants.AppConstants;
 import com.microsoft.playwright.BrowserContext;
 import com.microsoft.playwright.Page;
@@ -24,7 +23,7 @@ public class LoginPageActions {
 			if (page.url().equalsIgnoreCase(ConfigReader.getBaseURL().trim())) {
 				logger.info("Processing the login functionality...");
 				performLoginSteps(page);
-				BaseAction.verifyNavigationSuccess(page, AppConstants.LOGIN_BYPASS_URL_PATTERN,30000);
+				BaseAction.verifyNavigationSuccess(page, AppConstants.LOGIN_BYPASS_URL_PATTERN,ConfigReader.getTimeout());
 				saveState(page);
 				return;
 			} else if (page.url().contains(AppConstants.LOGIN_BYPASS_URL_PATTERN)) {

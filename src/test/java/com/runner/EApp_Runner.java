@@ -26,7 +26,8 @@ public class EApp_Runner extends AbstractRunner {
 		try {
 	        List<String> columnNames = ExcelTestDataUtil.getColumnNames(ExcelTestDataUtil.getData());
 	        for (String column : columnNames) {
-			Map<String, String> rowData = ExcelTestDataUtil.getData().get(column);
+//			Map<String, String> rowData = ExcelTestDataUtil.getData().get(column);
+			Map<String, String> rowData = ExcelTestDataUtil.getData().get("TestCase-No:3");
 			App_Processor product = new App_Processor();
 			Method productmethod = App_Processor.class.getMethod("possitiveProcess", Page.class, Map.class);
 			Object[][] executionData = { { product, productmethod, rowData } };

@@ -16,7 +16,8 @@ public class Beneficiaries_Page {
 	public static Selector relationshipToOwner = new Selector(SelectorType.XPATH, "//label//span[normalize-space(text())='Relationship to Owner']//parent::label//parent::div//following-sibling::div");
 
 	public static Selector identificationType  = new Selector(SelectorType.XPATH, "//label//span[normalize-space(text())='Identification Type']//parent::label//parent::div//following-sibling::div/label");
-	public static Selector taxIDNumber = new Selector(SelectorType.XPATH, "//label//span[normalize-space(text())='Tax ID Number / EIN']//parent::label//parent::div//following-sibling::div/input");
+	public static Selector taxIDNumber = new Selector(SelectorType.XPATH, "//label//span[normalize-space(text())='Tax ID Number']//parent::label//parent::div//following-sibling::div/input");
+	public static Selector EIN = new Selector(SelectorType.XPATH, "//label//span[normalize-space(text())='EIN']//parent::label//parent::div//following-sibling::div/input");
 	public static Selector socialSecurityNumber = new Selector(SelectorType.XPATH, "//label//span[normalize-space(text())='Social Security Number']//parent::label//parent::div//following-sibling::div/input");
 
 	public static Selector formationDate  = new Selector(SelectorType.XPATH, "//label//span[normalize-space(text())='Formation Date']//parent::label//parent::div//following-sibling::div/div/input");
@@ -24,7 +25,7 @@ public class Beneficiaries_Page {
 
 	public static Selector street1  = new Selector(SelectorType.XPATH, "//label//span[contains(normalize-space(text()),'Street Line 1')]//parent::label//parent::div//following-sibling::div//input");
 	public static Selector street2  = new Selector(SelectorType.XPATH, "//label//span[contains(normalize-space(text()),'Street Line 2')]//parent::label//parent::div//following-sibling::div//input");
-	public static Selector state  = new Selector(SelectorType.XPATH, "(//label//span[contains(normalize-space(text()),'State')]//parent::label//parent::div//following-sibling::div)[1]");
+	public static Selector state  = new Selector(SelectorType.XPATH, "(//label//span[contains(normalize-space(text()),'State')]//parent::label//parent::div//following-sibling::div)/div");
 	public static Selector City  = new Selector(SelectorType.XPATH, "//label//span[contains(normalize-space(text()),'City')]//parent::label//parent::div//following-sibling::div//input");
 	public static Selector zipCode  = new Selector(SelectorType.XPATH, "//label//span[contains(normalize-space(text()),'Zip Code')]//parent::label//parent::div//following-sibling::div//input");
 }

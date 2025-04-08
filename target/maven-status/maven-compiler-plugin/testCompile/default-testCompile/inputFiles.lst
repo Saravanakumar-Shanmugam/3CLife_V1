@@ -1,5 +1,6 @@
 C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\com\page\Funding_Page.java
 C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\com\actions\Suitability_Action.java
+C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\com\actions\Joint_Owne_Action.java
 C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\com\actions\CreateApplication.java
 C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\com\page\Suitability_Page.java
 C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\com\runner\Funding_Runner.java
@@ -8,6 +9,7 @@ C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\co
 C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\com\runner\EApp_Runner.java
 C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\com\page\Consents_Remarks_Page.java
 C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\com\runner\CreateApplicationRunner.java
+C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\com\page\Additional_Information_Page.java
 C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\com\page\CommonElements.java
 C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\com\page\Owner_Page.java
 C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\com\runner\Beneficiaries_Runner.java
@@ -17,6 +19,8 @@ C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\co
 C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\com\actions\Started_Product.java
 C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\com\page\Beneficiaries_Page.java
 C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\com\page\Trust_Page.java
+C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\com\runner\Additional_Information_Runner.java
+C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\com\actions\Additional_Information_Action.java
 C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\com\actions\Beneficiaries_Actions.java
 C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\com\page\LoginPage.java
 C:\Users\Premkumar A\Desktop\iLife_Automation\automation_3clife\src\test\java\com\runner\Owner_Runner.java

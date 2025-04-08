@@ -26,11 +26,18 @@ public class Started_Product {
 	public static Selector planTypeDropdown = new Selector(SelectorType.XPATH, "//label//span[normalize-space(text())='Plan Type']//parent::label//parent::div//following-sibling::div/div");
 	public static Selector accountDesignation =new Selector(SelectorType.XPATH, "//label//span[normalize-space(text())='Account Designation']//parent::label//parent::div//following-sibling::div/div");
 	public static Selector describeOtherEntity =new Selector(SelectorType.XPATH, "//label//span[normalize-space(text())='Describe Other Entity']//parent::label//parent::div//following-sibling::div/input");
-	public static Selector completedProductTrainingText = new Selector(SelectorType.XPATH, "//label[span[text()=\"Has this agent completed product training?\"]]/ancestor::div[@id][1]/preceding::div[@id][1]/descendant::label/span");
-	public static Selector completedProductTraining = new Selector(SelectorType.XPATH, "//label//span[text()='Has this agent completed product training?']/parent::label/parent::div/following-sibling::div/label");
-	public static Selector agentEOText = new Selector(SelectorType.XPATH, "//label[span[text()=\"Is the agent's E&O  current and equal to or greater than our minimums ($1m/$2m)?\"]]/ancestor::div[@id][1]/preceding::div[@id][1]/descendant::label/span");
-	public static Selector agentEO = new Selector(SelectorType.XPATH, "//label//span[text()=\"Is the agent's E&O  current and equal to or greater than our minimums ($1m/$2m)?\"]/parent::label/parent::div/following-sibling::div//label");
-	public static Selector currentAMLTrainingText = new Selector(SelectorType.XPATH, "//label[span[text()=\"Is the agent's AML training current?\"]]/ancestor::div[@id][1]/preceding::div[@id][1]/descendant::label/span");
-	public static Selector currentAMLTraining = new Selector(SelectorType.XPATH, "//label//span[text()=\"Is the agent's AML training current?\"]/parent::label/parent::div/following-sibling::div//label");
+	public static Selector completedProductTrainingText = new Selector(SelectorType.XPATH, "//label//span[contains(normalize-space(text()),'completed product training')]/ancestor::div[@id][1]/preceding::div[@id][1]/descendant::label/span");
+	public static Selector completedProductTraining = new Selector(SelectorType.XPATH, "//label//span[contains(normalize-space(text()),'completed product training')]/parent::label/parent::div/following-sibling::div/label");
+	public static Selector agentEOText = new Selector(SelectorType.XPATH, "//span[contains(normalize-space(text()),\"Errors and Omissions insurance is required\")]");
+	public static Selector currentAMLTrainingText = new Selector(SelectorType.XPATH, "//span[contains(normalize-space(text()),\"AML training is required\")]");
+	public static Selector getAgentEO(int i) {
+		 Selector agentEO = new Selector(SelectorType.XPATH, String.format("(//label//span[contains(normalize-space(text()), 'E&O current and equal to or greater than our minimums')])[%d]//parent::label//parent::div//following-sibling::div/label",(i + 1)*2));
+		return agentEO;
+	}
+	public static Selector getCurrentAMLTraining(int i) {
+		 Selector currentAMLTraining = new Selector(SelectorType.XPATH, String.format("(//label//span[contains(normalize-space(text()), 'AML training current')])[%d]//parent::label//parent::div//following-sibling::div/label",i+1));
+		return currentAMLTraining;
+	}
+
 
 }

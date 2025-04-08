@@ -20,7 +20,7 @@ public class Trust_Actions {
 			if (rowData.get("Type of Ownership").equalsIgnoreCase("Trust")) {
 				AllureUtils.logStep("proceeding with Trust Information ");
 				boolean notCompleted = BaseAction.isMenuCompleted(page, "Trust");
-				BaseAction.assertTrueCondition(notCompleted == false, "section is not completed.");
+				BaseAction.trueConditionCheck("section is not completed.",notCompleted == false);
 				page.waitForFunction("element => element.getAttribute('style') === 'background-color: white;'",
 						page.locator(Trust_Page.trustUSBased).elementHandle());
 				BaseAction.selectByValue(page, Trust_Page.valTrustUSBased, rowData.get("Trust_U.S. based?"));
@@ -55,7 +55,7 @@ public class Trust_Actions {
 				if (rowData.get("Trust_Agreement").toLowerCase().contains(AppConstants.OTHER)) {
 					BaseAction.fillInputField(page, Trust_Page.describeOther, rowData.get("Describe_Other"));
 				}
-				BaseAction.clickElement(page, CommonElements.next);
+				BaseAction.clickElement(page, CommonElements.Proceed);
 				page.pause();
 			}
 		} catch (Exception e) {

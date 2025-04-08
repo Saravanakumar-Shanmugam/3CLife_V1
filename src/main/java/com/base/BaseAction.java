@@ -1,17 +1,16 @@
 package com.base;
 
-import static org.junit.Assert.assertTrue;
-
 import java.io.PrintStream;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.config.ConfigReader;
 import com.constants.AppConstants;
 import com.microsoft.playwright.ElementHandle;
 import com.microsoft.playwright.FileChooser;
@@ -54,6 +53,13 @@ public class BaseAction {
 		}
 	}
 
+	public static void drSelectionByIndex(Page page, Selector selector, String value, int index) {
+		if (!value.isBlank() || !value.isEmpty()) {
+			clickElementByIndex(page, selector, index);
+			selectByValue(page, options, value);
+		}
+	}
+	
 	public static void drSelectionContain(Page page, String value) {
 		if (!value.isBlank() || !value.isEmpty()) {
 			selectByValueContain(page, options, value);
@@ -188,7 +194,7 @@ public class BaseAction {
 			Locator locator = getLocator(page, selector);
 			scrollToView(page, locator);
 			if (locator.isVisible() && locator.isEnabled()) {
-				locator.click(new Locator.ClickOptions().setForce(true));
+				locator.click();
 				waitForNetworkIdle(page);
 			} else {
 				logger.warn("Element not clickable: {}", selector.getValue());
@@ -247,6 +253,22 @@ public class BaseAction {
 		return getLocator(page, selector).isVisible();
 	}
 
+	public static void clickElementByIndex1(Page page, Selector selector, int index) {
+		try {
+			Locator locator = getLocator(page, selector, index);
+			scrollToView(page, locator);
+			if (locator.isVisible() && locator.isEnabled()) {
+				locator.click(new Locator.ClickOptions().setForce(true));
+				waitForNetworkIdle(page);
+			} else {
+				logger.warn("Element not clickable: {}", selector.getValue());
+			}
+		} catch (Exception e) {
+			logger.error("Failed to click the element: {}", selector.getValue(), e);
+			throw e; // Rethrow the exception for proper error handling
+		}
+	}
+
 	// Selects a dropdown value by visible text
 	public static void selectDropdownValue(Page page, Selector selector, String value) {
 		Locator locator = getLocator(page, selector);
@@ -272,6 +294,22 @@ public class BaseAction {
 
 		logger.info("Text '" + expectedText + "' is present in the element.");
 		return actualText != null && actualText.contains(expectedText);
+	}
+
+	public static boolean isTextPresent(Page page, Selector selector, String expectedText, int index) {
+		String actualText = getTextByIndex(page, selector, index).trim();
+
+		if (actualText.isBlank() || actualText.isEmpty()) {
+			actualText = page.locator(selector.getValue()).nth(index).getAttribute("value");
+		}
+
+		if (actualText == null || expectedText == null || !actualText.trim().contains(expectedText.trim())) {
+			throw new AssertionError(
+					"Expected text '" + expectedText + "' was not found. Actual text: '" + actualText + "'");
+		}
+
+		logger.info("Text '" + expectedText + "' is present in the element.");
+		return actualText != null && actualText.trim().contains(expectedText.trim());
 	}
 
 	// Hovers over an element
@@ -323,7 +361,7 @@ public class BaseAction {
 			String stateDescription) {
 		boolean isEnabled = isElementEnabled(page, selector); // Check if the element is enabled
 		// Fail the test if the actual state doesn't match the expected state
-		assertTrue(String.format("The element should be %s, but it was %s.", stateDescription,
+		trueConditionCheck(String.format("The element should be %s, but it was %s.", stateDescription,
 				isEnabled ? "enabled" : "disabled"), isEnabled == expectedState);
 	}
 
@@ -337,10 +375,13 @@ public class BaseAction {
 		logger.info("Waiting for the URL to contain '{}'.", expectedEndpoint);
 
 		try {
-			page.waitForURL(url -> url.contains(expectedEndpoint),
-					new Page.WaitForURLOptions().setTimeout(timeoutInMillis));
+			page.waitForURL(url -> {
+				System.out.println("URL changed to: " + url);
+				return url.contains(expectedEndpoint);
+			}, new Page.WaitForURLOptions().setTimeout(timeoutInMillis));
 			AllureUtils.logStep(String.format("Verifying if the page URL contains '%s'", expectedEndpoint));
-			assertTrue(String.format("Expected URL to contain '%s', but found: %s", expectedEndpoint, page.url()),
+			trueConditionCheck(
+					String.format("Expected URL to contain '%s', but found: %s", expectedEndpoint, page.url()),
 					page.url().contains(expectedEndpoint));
 			AllureUtils.logStep("Navigation action performed successfully.");
 			logger.info("Navigation success: The URL contains '{}'.", expectedEndpoint);
@@ -363,15 +404,31 @@ public class BaseAction {
 		}
 	}
 
+	// Retrieves the text content of an element and asserts the text matches the
+	public static String getTextByIndex(Page page, Selector selector, int index) {
+		try {
+			Locator elements = page.locator(selector.getValue());
+			elements.nth(index).waitFor(new Locator.WaitForOptions().setTimeout(ConfigReader.getTimeout()));
+			waitForNetworkIdle(page);
+			Locator locator = elements.nth(index);
+			return locator.textContent().trim();
+		} catch (PlaywrightException e) {
+			System.err.println("Element not found or text could not be retrieved: " + e.getMessage());
+			return "";
+		}
+	}
+
 	// Retrieves the value of an attribute of an element
 	public static String getElementAttribute(Page page, Selector selector, String attribute) {
 		Locator locator = getLocator(page, selector);
 		return locator.getAttribute(attribute);
 	}
 
-	// Asserts that a condition is true and logs a message
-	public static void assertTrueCondition(boolean condition, String message) {
-		assertTrue(message, condition);
+	public static void trueConditionCheck(String message, boolean condition) {
+		System.out.println("Check: " + message + " | Result: " + condition);
+		if (!condition) {
+			throw new AssertionError(message);
+		}
 	}
 
 	// Method to split a string by comma and store in a List<String>
@@ -380,7 +437,7 @@ public class BaseAction {
 		}
 		return Arrays.asList(value.split(";"));
 	}
-	
+
 	public static void listValidation(Page page, Selector selector, List<String> list) {
 		Locator locator = getLocator(page, selector);
 		if (locator.count() == list.size()) {
@@ -389,7 +446,7 @@ public class BaseAction {
 					if (locator.nth(i).textContent().trim().equalsIgnoreCase(list.get(i).trim())) {
 						scrollToView(page, locator.nth(i));
 					} else {
-						Assert.fail("Expected text :" + list.get(i).trim() + "is missmatch actual text is "
+						Assertions.fail("Expected text :" + list.get(i).trim() + "is missmatch actual text is "
 								+ locator.nth(i).textContent().trim());
 					}
 				}
@@ -397,13 +454,13 @@ public class BaseAction {
 				e.printStackTrace();
 			}
 		} else {
-			Assert.fail("Expected Count :" + list.size() + "is missmatch actual Count is " + locator.count());
+			Assertions.fail("Expected Count :" + list.size() + "is missmatch actual Count is " + locator.count());
 		}
 	}
 
 	// Method to check if a menu is completed
 	public static boolean isMenuCompleted(Page page, String menuName) {
-		String menuItemXPath = "//div[contains(@class,'sidebar-menu')]//li[not(.//button[@class='toggle-button'])]//a[text()='"
+		String menuItemXPath = "//div[@class='sidebar-menu ']//li[not(.//button[@class='toggle-button'])]//a[text()='"
 				+ menuName + "']";
 		waitForElement(page, new Selector(SelectorType.XPATH, menuItemXPath));
 		Locator menuItem = page.locator(menuItemXPath);
@@ -425,8 +482,8 @@ public class BaseAction {
 		waitForElement(page, selector);
 		for (int i = 0; i < locator.count(); i++) {
 			if (locator.nth(i).innerText().trim().equalsIgnoreCase(value)) {
-				logger.info(value + " is present in the list....");		
-				return position=i;
+				logger.info(value + " is present in the list....");
+				return position = i;
 			}
 		}
 		logger.error("{} is not found in the Options.", value);

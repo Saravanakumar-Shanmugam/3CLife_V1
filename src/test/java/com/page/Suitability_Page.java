@@ -122,10 +122,16 @@ public class Suitability_Page {
 			"//label[span[contains(normalize-space(text()), 'withdrawal value')]]//parent::div//following-sibling::input");
 	public static Selector fullyConsideredSurrende = new Selector(SelectorType.XPATH,
 			"//label[span[contains(normalize-space(text()), 'fully considered the surrender')]]//parent::div//following-sibling::div/label");
+	public static Selector runPreAssessmentButton = new Selector(SelectorType.XPATH,
+			"//button[normalize-space()='RUN PRE-ASSESSMENT']");
+	public static Selector suitabilityReviewLabel = new Selector(SelectorType.XPATH,
+			"//span[contains(normalize-space(),'This application has cleared preliminary suitability review.')]");
 
+	
 	// Owner + Agent Statements
 
 	// Owner Statement
+
 
 	public static Selector selectAsMany = new Selector(SelectorType.XPATH,
 			"//label[span[contains(normalize-space(text()), 'Select as many of the following that apply')]]//parent::div//following-sibling::div//div/label");
@@ -146,10 +152,27 @@ public class Suitability_Page {
 	public static Selector paidALabel = new Selector(SelectorType.XPATH, "//div[@id=\"question_45666\"]//p");
 	public static Selector paidCashCompensation = new Selector(SelectorType.XPATH, "//label[span[contains(normalize-space(text()), 'paid cash compensation')]]//parent::div//following-sibling::div//label");
 	
-	public static Selector describeOtherSources = new Selector(SelectorType.XPATH, "//label[span[contains(normalize-space(text()), 'Describe other sources')]]//parent::div//following-sibling::div/input");
+	public static Selector describeOtherSources = new Selector(SelectorType.XPATH, "//div[@id='question_45668']//div/input");
 	public static Selector otherFees = new Selector(SelectorType.XPATH, "//label[span[contains(normalize-space(text()), 'Other Fees')]]//parent::div//following-sibling::div/input");
 	public static Selector other = new Selector(SelectorType.XPATH, "//label//span[normalize-space()='Other (please explain)']//parent::label//parent::div//following-sibling::div//input");
 
 	public static Selector specify = new Selector(SelectorType.XPATH, "//div[@id='question_45664']//input");
+	
+	
+	// Agent Disclosures and Acknowledgments
+
+	public static Selector relationshipWithApplicant = new Selector(SelectorType.XPATH, "//div[@id='question_46166']//div/div[contains(@class,'custom-select__control')]");
+	public static Selector LevelOfAcquaintance  = new Selector(SelectorType.XPATH, "//div[@id='question_46202']//div/div[contains(@class,'custom-select__control')]");
+	public static Selector Years  = new Selector(SelectorType.XPATH, "//div[@id='question_46200']//div/input");
+	public static Selector Months  = new Selector(SelectorType.XPATH, "//div[@id='question_46201']//div/input");
+	public static Selector existingInsuranceOrAnnuities  = new Selector(SelectorType.XPATH, "//div[@id='question_41624']//div[contains(@class,'custom-radio')]//label");
+	public static Selector changeOrReplaceExistingInsurance  = new Selector(SelectorType.XPATH, "//div[@id='question_41632']//div[contains(@class,'custom-radio')]//label");
+	public static Selector gaveApplicantCopy  = new Selector(SelectorType.XPATH, "//div[@id='question_41626']//div[contains(@class,'custom-radio')]//label");
+	public static Selector haveMadeReasonableEffort  = new Selector(SelectorType.XPATH, "//div[@id='question_41627']//div[contains(@class,'custom-radio')]//label");
+	public static Selector productRecommendationWellGrounded  = new Selector(SelectorType.XPATH, "//div[@id='question_41628']//div[contains(@class,'custom-radio')]//label");
+	public static Selector accuratelyRecorded  = new Selector(SelectorType.XPATH, "//div[@id='question_41629']//div[contains(@class,'custom-radio')]//label");
+	public static Selector applicationCompletion  = new Selector(SelectorType.XPATH, "//div[@id='question_41630']//div[contains(@class,'custom-radio')]//label");
+	public static Selector reasonForRecommendingProduct  = new Selector(SelectorType.XPATH, "//span[normalize-space()='Reason for Recommending the Product']//parent::label//parent::div//following-sibling::div//label");
+
 	
 }

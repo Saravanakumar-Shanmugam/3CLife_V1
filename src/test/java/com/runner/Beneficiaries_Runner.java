@@ -11,10 +11,8 @@ import com.actions.Beneficiaries_Actions;
 import com.actions.CreateApplication;
 import com.actions.ExcelTestDataUtil;
 import com.base.AbstractRunner;
-import com.constants.AppConstants;
 import com.microsoft.playwright.Page;
 import com.utils.ErrorHandler;
-import com.utils.ExcelReader;
 
 import io.qameta.allure.Feature;
 
@@ -26,11 +24,11 @@ public class Beneficiaries_Runner extends AbstractRunner{
 	@Feature("Beneficiaries Information Positive Flow")
 	public void ownerInformation() {
 		try {
-			Map<String, String> rowData = ExcelTestDataUtil.getData().get("TestCase-No:5");
+			Map<String, String> rowData = ExcelTestDataUtil.getData().get("TestCase-No:4");
 
 			CreateApplication createApplication = new CreateApplication();
 //			Method createMethod = CreateApplication.class.getMethod("createApplicationPopup", Page.class,Map.class);
-			Method createMethod = CreateApplication.class.getMethod("name", Page.class, Map.class);
+			Method createMethod = CreateApplication.class.getMethod("firstRowSelection", Page.class, Map.class);
 
 			Beneficiaries_Actions product = new Beneficiaries_Actions();
 			Method productmethod = Beneficiaries_Actions.class.getMethod("beneficiariesFlow", Page.class, Map.class);

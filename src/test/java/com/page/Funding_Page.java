@@ -59,5 +59,6 @@ public class Funding_Page {
 	public static Selector checkThisBox =new Selector(SelectorType.XPATH, "//span[contains(text(),'Check this box')]//parent::label");
 	public static Selector ShrProcessingLocations =new Selector(SelectorType.XPATH, "//div[@class='list-header']//following-sibling::div//label");
 	public static Selector selectCompany =new Selector(SelectorType.XPATH, "//button[text()='SELECT COMPANY']");
-	
+	public static Selector requestedTransferDate =new Selector(SelectorType.XPATH, "//label//span[contains(normalize-space(),'Requested Transfer Date')]//parent::label//parent::div//following-sibling::div//input");
+
 }

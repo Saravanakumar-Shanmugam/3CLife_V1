@@ -8,9 +8,10 @@ public class AppConstants {
 	public static final String BROWSER_CHROME = "chrome";
 	public static final String BROWSER_FIREFOX = "firefox";
 	public static final String BROWSER_WEBKIT = "webkit";
-	public static final String AUTH_STATE_FILE_PATH = "authState.json";
-	public static final String VIDEO_DIR_KEY = "videoDir";
-	public static final String ALLURE_RESULTS_PATH = "allure-results";
+	public static final String AUTH_STATE_FILE_PATH = "target/authState.json";
+	public static final String VIDEO_DIR_KEY = "target/videos";
+    public static final String SCREENSHOTS_PATH = "target/screenshots/";
+    public static final String ALLURE_RESULTS_PATH = "allure-results";
 
 	public static final String BASE_URL = "baseURL";
 	public static final String BROWSERS = "browsers";
@@ -55,11 +56,13 @@ public class AppConstants {
 	public static final String BENEFICIARIES_ERROR_MESSAGE = "You have not completed this page. Total Percentage for all Primary Beneficiaries must equal 100% and Contingent Beneficiaries must also sum to 100% if specified.";
 	public static final String PRODUCT_AVAILABILITY_MESSAGE = "This product is available for sale only to US entities at this time.";
 
-	public static final String PRODUCT_TRAINING_REQUIRED = "Product training is required of all writing agents prior to solicitation of this product but we do not have a certificate of completion recorded in our system for this agent. ";
+	public static final String PRODUCT_TRAINING_REQUIRED = "Product training is required for all Writing Agents prior to soliciting this product, but we do not have a Certificate of Completion recorded in our system for this Agent.";
 
-	public static final String E_AND_O_REQUIRED = "Errors and Omissions insurance is required by all writing agents prior to solicitation of this product but the information in our records is expired or invalid. ";
+	public static final String E_AND_O_REQUIRED = "Errors and Omissions insurance is required by all writing agents prior to solicitation of this product but the information in our records is expired or invalid. \r\n"
+			+ "\r\n"
+			+ "Is the agent's E&O  current and equal to or greater than our minimums ($1m/$2m)? If so, please attach proof of insurance to this e-App.";
 
-	public static final String AML_TRAINING_REQUIRED = "AML training is required of all writing agents prior to solicitation of this product but we do not  yet have a record of current AML training for this agent.";
+	public static final String AML_TRAINING_REQUIRED = "AML training is required for all Writing Agents prior to the solicitation of this product, but we do not yet have a record of current AML training for this Agent.";
 
 	public static final String AGENT_PRODUCT_TYPES = "What Types of Products Can I Sell You?";
 
@@ -75,6 +78,10 @@ public class AppConstants {
     public static final String PRE_EXISTING_RELATIONSHIP = "The Proposed Owner has a pre-existing relationship with agent / producer of";
     public static final String OTHER = "Other";
 
+    public static final String XML_FILE_PATH = "src/test/resources/file_data/party.xml";
+    public static final String XSD_FILE_PATH = "src/test/resources/input_data/party.xsd";
+
+    public static final String PRE_ASSESSMENT_RESULT = "Pre-assessment Result (1): This application has cleared preliminary suitability review.";
 
 }
 

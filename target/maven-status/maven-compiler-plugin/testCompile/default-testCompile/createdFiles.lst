@@ -22,13 +22,17 @@ com\actions\Beneficiaries_Actions.class
 com\page\Consents_Remarks_Page.class
 com\actions\Started_Product.class
 com\runner\Joint_Annuitant_Runner.class
+com\actions\Additional_Information_Action.class
 com\actions\Consents_Remarks_Actions.class
 com\page\CreateApplicationPopup.class
 com\page\Owner_Page.class
+com\page\Additional_Information_Page.class
 com\page\LoginPage.class
 com\runner\Consents_Remarks_Runner.class
 com\runner\Funding_Runner.class
 com\page\Annuitant_Page.class
+com\runner\Additional_Information_Runner.class
+com\actions\Joint_Owne_Action.class
 com\actions\Trust_Actions.class
 com\runner\Documents_Signature_Runner.class
 com\actions\ExcelTestDataUtil.class

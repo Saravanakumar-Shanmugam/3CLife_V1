@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.base.BaseAction;
+import com.config.ConfigReader;
 import com.microsoft.playwright.Page;
 import com.page.Beneficiaries_Page;
 import com.page.CommonElements;
@@ -17,7 +18,7 @@ public class Beneficiaries_Actions {
 	public static void beneficiariesFlow(Page page, Map<String, String> rowData) {
 		AllureUtils.logStep("proceeding with Beneficiaries Information ");
 		boolean notCompleted = BaseAction.isMenuCompleted(page, "Beneficiaries");
-		BaseAction.assertTrueCondition(notCompleted == false, "section is not completed.");
+		BaseAction.trueConditionCheck("section is not completed.", notCompleted == false);
 		BaseAction.isTextPresent(page, Beneficiaries_Page.primaryBeneficiaries, "0");
 		BaseAction.isTextPresent(page, Beneficiaries_Page.contingentBeneficiaries, "0");
 		List<String> personOrEntity = BaseAction.split(rowData.get("Person or an Entity"));
@@ -37,25 +38,26 @@ public class Beneficiaries_Actions {
 						BaseAction.split(rowData.get("Person_Prefix")).get(Person));
 				BaseAction.fillInputField(page, CommonElements.firstName,
 						BaseAction.split(rowData.get("Person_First Name")).get(Person));
-				if(BaseAction.split(rowData.get("Person_Middle Name")).size()-1>=Person) {
-				BaseAction.fillInputField(page, CommonElements.initial,
-						BaseAction.split(rowData.get("Person_Middle Name")).get(Person));
+				if (BaseAction.split(rowData.get("Person_Middle Name")).size() - 1 >= Person) {
+					BaseAction.fillInputField(page, CommonElements.initial,
+							BaseAction.split(rowData.get("Person_Middle Name")).get(Person));
 				}
 				BaseAction.fillInputField(page, CommonElements.lastName,
 						BaseAction.split(rowData.get("Person_Last Name")).get(Person));
-				if(BaseAction.split(rowData.get("Person_Suffix")).size()-1>=Person) {
-				BaseAction.drSelection(page, CommonElements.suffix,
-						BaseAction.split(rowData.get("Person_Suffix")).get(Person));
+				if (BaseAction.split(rowData.get("Person_Suffix")).size() - 1 >= Person) {
+					BaseAction.drSelection(page, CommonElements.suffix,
+							BaseAction.split(rowData.get("Person_Suffix")).get(Person));
 				}
 				BaseAction.datePicker(page, CommonElements.dateOfBirth,
 						BaseAction.split(rowData.get("Person_Date of Birth")).get(Person));
 				BaseAction.fillInputField(page, Beneficiaries_Page.street1,
-						BaseAction.split(rowData.get("Person_Street Line 1")).get(Person));
-				BaseAction.drSelectionContain(page, BaseAction.split(rowData.get("Person_City")).get(Person));
-				page.waitForTimeout(2000);
-				if(BaseAction.split(rowData.get("Person_Street Line 2")).size()-1>=Person) {
-				BaseAction.fillInputField(page, Beneficiaries_Page.street2,
-						BaseAction.split(rowData.get("Person_Street Line 2")).get(Person));
+						BaseAction.split(rowData.get("Person_Street Line 1")).get(Person)+" "+BaseAction.split(rowData.get("Person_City")).get(Person));
+				page.waitForTimeout(ConfigReader.getTimeout());
+				BaseAction.drSelectionContain(page, BaseAction.split(rowData.get("Person_Street Line 1")).get(Person)+", "+BaseAction.split(rowData.get("Person_City")).get(Person));
+				page.waitForTimeout(ConfigReader.getTimeout());
+				if (BaseAction.split(rowData.get("Person_Street Line 2")).size() - 1 >= Person) {
+					BaseAction.fillInputField(page, Beneficiaries_Page.street2,
+							BaseAction.split(rowData.get("Person_Street Line 2")).get(Person));
 				}
 //				page.waitForCondition(() -> {
 //				    String value = LocatorFactory.getLocator(page, Beneficiaries_Page.City).inputValue();
@@ -85,6 +87,7 @@ public class Beneficiaries_Actions {
 			} else if (personOrEntity.get(i).equalsIgnoreCase("Entity")) {
 				int ssn = 0;
 				int taxID = 0;
+				int ein = 0;
 				BaseAction.fillInputField(page, Beneficiaries_Page.percentage,
 						BaseAction.split(rowData.get("Entity_Percentage")).get(Entity));
 				BaseAction.fillInputField(page, Beneficiaries_Page.fullName,
@@ -96,20 +99,25 @@ public class Beneficiaries_Actions {
 					BaseAction.typeInputField(page, Beneficiaries_Page.socialSecurityNumber,
 							BaseAction.split(rowData.get("Entity_Social Security Number")).get(ssn));
 					ssn++;
-				} else {
+				} else if ("Tax ID Number".equalsIgnoreCase(BaseAction.split(rowData.get("Entity_Identification Type")).get(Entity))) {
 					BaseAction.typeInputField(page, Beneficiaries_Page.taxIDNumber,
-							BaseAction.split(rowData.get("Entity_Tax ID Number / EIN")).get(taxID));
+							BaseAction.split(rowData.get("Entity_Tax ID Number")).get(taxID));
 					taxID++;
+				} else if ("EIN".equalsIgnoreCase(BaseAction.split(rowData.get("Entity_Identification Type")).get(Entity))) {
+					BaseAction.typeInputField(page, Beneficiaries_Page.EIN,
+							BaseAction.split(rowData.get("EIN ")).get(ein));
+					ein++;
 				}
 				BaseAction.datePicker(page, Beneficiaries_Page.formationDate,
 						BaseAction.split(rowData.get("Entity_Formation Date")).get(Entity));
 				BaseAction.fillInputField(page, Beneficiaries_Page.street1,
-						BaseAction.split(rowData.get("Entity_Street Line 1")).get(Entity));
-				BaseAction.drSelectionContain(page, BaseAction.split(rowData.get("Entity_City")).get(Entity));
-				page.waitForTimeout(2000);
-				if(BaseAction.split(rowData.get("Person_Suffix")).size()-1>=Entity) {
-				BaseAction.fillInputField(page, Beneficiaries_Page.street2,
-						BaseAction.split(rowData.get("Entity_Street Line 2")).get(Entity));
+						BaseAction.split(rowData.get("Entity_Street Line 1")).get(Entity)+" "+ BaseAction.split(rowData.get("Entity_City")).get(Entity));
+				page.waitForTimeout(ConfigReader.getTimeout());
+				BaseAction.drSelectionContain(page, BaseAction.split(rowData.get("Entity_Street Line 1")).get(Entity)+", "+ BaseAction.split(rowData.get("Entity_City")).get(Entity));
+				page.waitForTimeout(ConfigReader.getTimeout());
+				if (BaseAction.split(rowData.get("Entity_Street Line 2")).size() - 1 >= Entity) {
+					BaseAction.fillInputField(page, Beneficiaries_Page.street2,
+							BaseAction.split(rowData.get("Entity_Street Line 2")).get(Entity));
 				}
 				BaseAction.isTextPresent(page, Beneficiaries_Page.state,
 						BaseAction.split(rowData.get("Entity_State")).get(Entity));
@@ -138,6 +146,6 @@ public class Beneficiaries_Actions {
 		}
 		BaseAction.isTextPresent(page, Beneficiaries_Page.primaryBeneficiaries, "100");
 		BaseAction.isTextPresent(page, Beneficiaries_Page.contingentBeneficiaries, "100");
-		BaseAction.clickElement(page, CommonElements.next);
+		BaseAction.clickElement(page, CommonElements.Proceed);
 	}
 }

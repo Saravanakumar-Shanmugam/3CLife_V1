@@ -22,7 +22,7 @@ public class Joint_Annuitant_Action {
 						rowData.get("Joint Annuitant Same as Owner"));
 				if (rowData.get("Joint Annuitant Same as Owner").toLowerCase()
 						.contains(AppConstants.NO.toLowerCase())) {
-					BaseAction.clickElement(page, CommonElements.next);
+					BaseAction.clickElement(page, CommonElements.Proceed);
 					page.waitForFunction("element => element.getAttribute('style') === 'background-color: white;'",
 							page.locator(Annuitant_Page.valAnnuitantUSCitizen).elementHandle());
 					BaseAction.selectByValue(page, Annuitant_Page.annuitantUSCitizen,
@@ -118,6 +118,6 @@ public class Joint_Annuitant_Action {
 				jointAnnuitan(page, rowData);
 			}
 		}
-		BaseAction.clickElement(page, CommonElements.next);
+		BaseAction.clickElement(page, CommonElements.Proceed);
 	}
 }

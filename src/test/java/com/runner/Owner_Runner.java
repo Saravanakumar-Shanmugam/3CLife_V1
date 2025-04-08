@@ -31,7 +31,7 @@ public class Owner_Runner extends AbstractRunner {
 
 			CreateApplication createApplication = new CreateApplication();
 //			Method createMethod = CreateApplication.class.getMethod("createApplicationPopup", Page.class,Map.class);
-			Method createMethod = CreateApplication.class.getMethod("name", Page.class, Map.class);
+			Method createMethod = CreateApplication.class.getMethod("firstRowSelection", Page.class, Map.class);
 
 			Owner_Actions product = new Owner_Actions();
 			Method productmethod = Owner_Actions.class.getMethod("ownerInformation", Page.class, Map.class);

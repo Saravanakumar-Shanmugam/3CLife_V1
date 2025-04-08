@@ -60,7 +60,9 @@ public class Started_ProductRunner extends AbstractRunner {
 			Map<String, String> rowData = ExcelTestDataUtil.getData().get("TestCase-No:1");
 
 			CreateApplication createApplication = new CreateApplication();
-			Method createMethod = CreateApplication.class.getMethod("name", Page.class, Map.class);
+//			Method createMethod = CreateApplication.class.getMethod("createApplicationPopup", Page.class,Map.class);
+
+			Method createMethod = CreateApplication.class.getMethod("firstRowSelection", Page.class, Map.class);
 
 			Started_Product product = new Started_Product();
 			Method productmethod = Started_Product.class.getMethod("StartedProduct", Page.class, Map.class);

@@ -3,15 +3,7 @@ package com.page;
 import com.selectors.Selector;
 import com.selectors.SelectorType;
 
-public class Consents_Remarks_Page {
-	
-	// Consents
-
-	public static Selector consentElectronicDeliveryDocuments = new Selector(SelectorType.XPATH,
-			"//label[span[contains(normalize-space(text()), 'receive documents electronically')]]//parent::div//following-sibling::div/label");
-	public static Selector deliveryPolicy = new Selector(SelectorType.XPATH,
-			"//label[span[contains(normalize-space(text()), 'Delivery of Policy to')]]//parent::div//following-sibling::div/label");
-	
+public class Consents_Remarks_Page {	
 	// Remarks
 
 	public static Selector remarks = new Selector(SelectorType.XPATH,

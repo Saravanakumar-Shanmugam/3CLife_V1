@@ -29,7 +29,7 @@ public class Joint_Annuitant_Runner extends AbstractRunner{
 			Map<String, String> rowData = ExcelTestDataUtil.getData().get("TestCase-No:4");  
 			CreateApplication createApplication = new CreateApplication();
 //			Method createMethod = CreateApplication.class.getMethod("createApplicationPopup", Page.class,Map.class);
-			Method createMethod = CreateApplication.class.getMethod("name", Page.class, Map.class);
+			Method createMethod = CreateApplication.class.getMethod("firstRowSelection", Page.class, Map.class);
 
 			Joint_Annuitant_Action product = new Joint_Annuitant_Action();
 			Method productmethod = Joint_Annuitant_Action.class.getMethod("jointAnnuitantFlow", Page.class, Map.class);

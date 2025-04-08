@@ -24,10 +24,10 @@ public class Documents_Signature_Runner extends AbstractRunner {
 	@Feature("Documents & Signature Information Positive Flow")
 	public void ownerInformation() {
 		try {
-			Map<String, String> rowData = ExcelTestDataUtil.getData().get("TestCase-No:2");
+			Map<String, String> rowData = ExcelTestDataUtil.getData().get("TestCase-No:3");
 
 			CreateApplication createApplication = new CreateApplication();
-			Method createMethod = CreateApplication.class.getMethod("name", Page.class, Map.class);
+			Method createMethod = CreateApplication.class.getMethod("firstRowSelection", Page.class, Map.class);
 
 			Documents_Signature_Actions product = new Documents_Signature_Actions();
 			Method Consents = Documents_Signature_Actions.class.getMethod("uploadDocument", Page.class, Map.class);

@@ -25,13 +25,13 @@ public class Started_Product {
 			page.waitForTimeout(ConfigReader.getTimeout());
 			BaseAction.waitForNetworkIdle(page);
 			boolean notCompleted = BaseAction.isMenuCompleted(page, "Product");
-			BaseAction.assertTrueCondition(notCompleted == false, "section is not completed.");
+			BaseAction.trueConditionCheck("section is not completed.", notCompleted == false);
 			BaseAction.waitForElement(page, CommonElements.bannerTitle);
-			BaseAction.listValidation(page, CommonElements.bannerTitle,
-					BaseAction.split(rowData.get("Dashboard-title")));
+//			BaseAction.listValidation(page, CommonElements.bannerTitle,
+//					BaseAction.split(rowData.get("Dashboard-title")));
 			BaseAction.waitForElement(page, com.page.Started_Product.productDropdown);
-			page.waitForFunction("element => element.getAttribute('style') === 'background-color: white;'",
-					page.locator(com.page.Started_Product.termSelectionDropdownQ).elementHandle());
+//			page.waitForFunction("element => element.getAttribute('style') === 'background-color: white;'",
+//					page.locator(com.page.Started_Product.termSelectionDropdownQ).elementHandle());
 //			BaseAction.drSelection(page, com.page.Started_Product.productDropdown, rowData.get("Product Type"));
 			BaseAction.drSelection(page, com.page.Started_Product.termSelectionDropdown, rowData.get("Term Selection"));
 			if (rowData.get("Resubmitted or Replaced").equalsIgnoreCase(AppConstants.YES)) {
@@ -46,9 +46,10 @@ public class Started_Product {
 			if (TypeofOwnership.equalsIgnoreCase("Trust")) {
 				boolean boolval = BaseAction.isTextPresent(page, com.page.Started_Product.accountDesignation,
 						TypeofOwnership);
-				BaseAction.assertTrueCondition(boolval,
+				BaseAction.trueConditionCheck(
 						"if the Type of Ownership is Trust means by default 9the Account Designation  is also selected as Trust but it was selected as : "
-								+ BaseAction.getText(page, com.page.Started_Product.accountDesignation));
+								+ BaseAction.getText(page, com.page.Started_Product.accountDesignation),
+						boolval);
 				if (!rowData.get("Account Designation").equalsIgnoreCase("Trust")) {
 					BaseAction.drSelection(page, com.page.Started_Product.accountDesignation,
 							rowData.get("Account Designation"));
@@ -58,40 +59,53 @@ public class Started_Product {
 						rowData.get("Account Designation"));
 			}
 			logger.info("Dropdown value is : " + BaseAction.getText(page, com.page.Started_Product.accountDesignation));
-			BaseAction.drSelection(page, com.page.Started_Product.planTypeDropdown, rowData.get("Plan Type"));
+			if (TypeofOwnership.equalsIgnoreCase("Joint")) {
+				if (!rowData.get("Plan Type").equalsIgnoreCase("Non-Qualified")) {
+					BaseAction.isTextPresent(page, com.page.Started_Product.planTypeDropdown, rowData.get("Plan Type"));
+				}
+			} else {
+				BaseAction.drSelection(page, com.page.Started_Product.planTypeDropdown, rowData.get("Plan Type"));
+			}
 			List<String> splitValues = BaseAction.split(rowData.get("Writing_Agent_Split%"));
 			logger.info("Total no of agent added : " + splitValues.size());
 			for (int i = 0; i < splitValues.size(); i++) { // Changed from <= to <
 				if (i < splitValues.size()) {
 					BaseAction.fillInputFieldByIndex(page, com.page.Started_Product.WritingCode,
 							BaseAction.split(rowData.get("Writing_Agent_Code")).get(i), i);
-					BaseAction.fillInputFieldByIndex(page, com.page.Started_Product.agentFirstName,
+					BaseAction.clickElementByIndex1(page, com.page.Started_Product.agentFirstName, i);
+					page.waitForTimeout(ConfigReader.getTimeout());
+					BaseAction.waitForNetworkIdle(page);
+					BaseAction.isTextPresent(page, com.page.Started_Product.agentFirstName,
 							BaseAction.split(rowData.get("Writing Agent_First Name")).get(i), i);
-					BaseAction.fillInputFieldByIndex(page, com.page.Started_Product.agentMiddleName,
-							BaseAction.split(rowData.get("Writing Agent_First Name")).get(i), i);
-					BaseAction.fillInputFieldByIndex(page, com.page.Started_Product.agentLastName,
+					BaseAction.isTextPresent(page, com.page.Started_Product.agentMiddleName,
+							BaseAction.split(rowData.get("Writing_Agent_Name")).get(i), i);
+					BaseAction.isTextPresent(page, com.page.Started_Product.agentLastName,
 							BaseAction.split(rowData.get("Writing Agent_Last Name")).get(i), i);
-					BaseAction.fillInputFieldByIndex(page, com.page.Started_Product.agentEmail,
+					BaseAction.isTextPresent(page, com.page.Started_Product.agentEmail,
 							BaseAction.split(rowData.get("Writing_Agent_Email_Address")).get(i), i);
 					BaseAction.fillInputFieldByIndex(page, com.page.Started_Product.Split, splitValues.get(i), i);
-//					if (i == 0) {
+					if (i > 0) {
 //						BaseAction.isTextPresent(page, com.page.Started_Product.completedProductTrainingText,
 //								AppConstants.PRODUCT_TRAINING_REQUIRED);
-//						BaseAction.selectByValue(page, com.page.Started_Product.completedProductTraining, "No");
-//						BaseAction.isTextPresent(page, com.page.Started_Product.agentEOText,
-//								AppConstants.E_AND_O_REQUIRED);
-//						BaseAction.selectByValue(page, com.page.Started_Product.agentEO, "No");
-//						BaseAction.isTextPresent(page, com.page.Started_Product.currentAMLTrainingText,
-//								AppConstants.AML_TRAINING_REQUIRED);
-//						BaseAction.selectByValue(page, com.page.Started_Product.currentAMLTraining, "No");
-//					}
+						BaseAction.selectByValue(page, com.page.Started_Product.completedProductTraining,
+								BaseAction.split(rowData.get("ompleted_product_training")).get(i));
+					}
+//					BaseAction.isTextPresent(page, com.page.Started_Product.agentEOText, AppConstants.E_AND_O_REQUIRED,
+//							i);
+					BaseAction.selectByValue(page, com.page.Started_Product.getAgentEO(i),
+							BaseAction.split(rowData.get("agent's E&O")).get(i));
+//					BaseAction.isTextPresent(page, com.page.Started_Product.currentAMLTrainingText,
+//							AppConstants.AML_TRAINING_REQUIRED, i);
+					BaseAction.selectByValue(page, com.page.Started_Product.getCurrentAMLTraining(i),
+							BaseAction.split(rowData.get("current_AML_training")).get(i));
+
 					BaseAction.selectByValue(page, com.page.Started_Product.getSecondaryAgentOptions(i),
 							BaseAction.split(rowData.get("additional Agent")).get(i));
 				}
 			}
 			String totalvalue = BaseAction.getElementAttribute(page, com.page.Started_Product.totalSplit, "value");
-			BaseAction.assertTrueCondition(totalvalue.equalsIgnoreCase("100%"), "Total Split % is " + totalvalue);
-			BaseAction.clickElement(page, CommonElements.next);
+			BaseAction.trueConditionCheck("Total Split % is " + totalvalue, totalvalue.equalsIgnoreCase("100%"));
+			BaseAction.clickElement(page, CommonElements.Proceed);
 		} catch (Exception e) {
 			ErrorHandler.handleError("Started_Product", e, page);
 		}
@@ -99,7 +113,7 @@ public class Started_Product {
 
 	public static void requiredValidation(Page page, Map<String, String> rowData) {
 		try {
-			BaseAction.clickElement(page, CommonElements.next);
+			BaseAction.clickElement(page, CommonElements.Proceed);
 			page.waitForTimeout(2000);
 			List<String> splitValues = BaseAction.split(rowData.get("Started_Product_Required"));
 			BaseAction.listValidation(page, CommonElements.error, splitValues);

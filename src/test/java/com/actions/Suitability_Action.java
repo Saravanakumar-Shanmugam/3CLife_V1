@@ -18,8 +18,8 @@ public class Suitability_Action {
 		page.waitForFunction("element => element.getAttribute('style') === 'background-color: white;'",
 				page.locator(Suitability_Page.valCorporationorEntityUSBased).elementHandle());
 		BaseAction.selectByValue(page, Suitability_Page.activeDutyPersonnel, rowData.get("active duty personnel"));
-		BaseAction.clickElement(page, CommonElements.next);
-		page.waitForTimeout(ConfigReader.getTimeout());
+//		BaseAction.clickElement(page, CommonElements.next);
+//		page.waitForTimeout(ConfigReader.getTimeout());
 	}
 
 	public static void financialResources(Page page, Map<String, String> rowData) {
@@ -98,7 +98,7 @@ public class Suitability_Action {
 				rowData.get("intended use of any riders"));
 		BaseAction.multiSelectByValue(page, Suitability_Page.contractFeatures,
 				rowData.get("contract features discussed"));
-		BaseAction.clickElement(page, CommonElements.next);
+		BaseAction.clickElement(page, CommonElements.Proceed);
 		page.waitForTimeout(ConfigReader.getTimeout());
 	}
 
@@ -123,7 +123,7 @@ public class Suitability_Action {
 		}
 		BaseAction.selectByValue(page, Suitability_Page.amountPaidForAnnuity,
 				rowData.get("amount being paid for this annuity"));
-		BaseAction.clickElement(page, CommonElements.next);
+		BaseAction.clickElement(page, CommonElements.Proceed);
 		page.waitForTimeout(ConfigReader.getTimeout());
 	}
 
@@ -158,11 +158,13 @@ public class Suitability_Action {
 						rowData.get("fully considered the surrender"));
 			}
 		}
-		BaseAction.clickElement(page, CommonElements.next);
+		BaseAction.clickElement(page, CommonElements.Proceed);
 	}
 
 	public static void ownerAgentStatements(Page page, Map<String, String> rowData) {
 		AllureUtils.logStep("proceeding with Suitability Owner + Agent Statements Information ");
+
+		additionalInformation(page, rowData);
 		BaseAction.multiSelectByValue(page, Suitability_Page.selectAsMany,
 				rowData.get("Select as many of the following that apply"));
 		BaseAction.selectByValue(page, Suitability_Page.personOrRemote,
@@ -170,24 +172,53 @@ public class Suitability_Action {
 		BaseAction.selectByValue(page, Suitability_Page.submittingSupplemental,
 				rowData.get("submitting supplemental suitability information"));
 		BaseAction.isTextPresent(page, Suitability_Page.typeOfProductQLabel, AppConstants.AGENT_PRODUCT_TYPES);
-		BaseAction.isTextPresent(page, Suitability_Page.typeOfProductALabel, AppConstants.AGENT_PRODUCT_SALES_DISCLOSURE);
+		BaseAction.isTextPresent(page, Suitability_Page.typeOfProductALabel,
+				AppConstants.AGENT_PRODUCT_SALES_DISCLOSURE);
 		BaseAction.multiSelectByValue(page, Suitability_Page.offerProducts, rowData.get("offer_Products"));
-		BaseAction.multiSelectByValue(page, Suitability_Page.licensedAuthorizedProvideAdvice, rowData.get("licensed_Authorized_Provide_Advice"));
+		BaseAction.multiSelectByValue(page, Suitability_Page.licensedAuthorizedProvideAdvice,
+				rowData.get("licensed_Authorized_Provide_Advice"));
 		BaseAction.drSelection(page, Suitability_Page.authorizedToSell, rowData.get("authorized_To_Sell"));
-		if(AppConstants.ANNUITIES.equalsIgnoreCase(rowData.get("authorized_To_Sell"))) {
+		if (AppConstants.ANNUITIES.equalsIgnoreCase(rowData.get("authorized_To_Sell"))) {
 			BaseAction.fillInputField(page, Suitability_Page.specify, rowData.get("specify"));
 		}
 		BaseAction.isTextPresent(page, Suitability_Page.paidQLabel, AppConstants.AGENT_PAYMENT_DISCLOSURE_TITLE);
 		BaseAction.isTextPresent(page, Suitability_Page.paidALabel, AppConstants.AGENT_PAYMENT_DISCLOSURE);
-		BaseAction.multiSelectByValue(page, Suitability_Page.paidCashCompensation, rowData.get("paid_Cash_Compensation"));
-		if(rowData.get("paid_Cash_Compensation").equalsIgnoreCase(AppConstants.COMMISSION)) {
-			BaseAction.fillInputField(page, Suitability_Page.describeOtherSources, rowData.get("Describe-other_sources"));
-		} else if(rowData.get("paid_Cash_Compensation").equalsIgnoreCase(AppConstants.FEES)) {
+		BaseAction.multiSelectByValue(page, Suitability_Page.paidCashCompensation,
+				rowData.get("paid_Cash_Compensation"));
+		if (rowData.get("paid_Cash_Compensation").equalsIgnoreCase(AppConstants.COMMISSION)) {
+			BaseAction.fillInputField(page, Suitability_Page.describeOtherSources,
+					rowData.get("Describe-other_sources"));
+		} else if (rowData.get("paid_Cash_Compensation").equalsIgnoreCase(AppConstants.FEES)) {
 			BaseAction.fillInputField(page, Suitability_Page.otherFees, rowData.get("Other_Fees"));
-		}else if(rowData.get("paid_Cash_Compensation").equalsIgnoreCase("Other")) {
+		} else if (rowData.get("paid_Cash_Compensation").equalsIgnoreCase("Other")) {
 			BaseAction.fillInputField(page, Suitability_Page.other, rowData.get("other"));
 		}
-		BaseAction.clickElement(page, CommonElements.next);
+		BaseAction.clickElement(page, Suitability_Page.runPreAssessmentButton);
+		BaseAction.isTextPresent(page, Suitability_Page.suitabilityReviewLabel, AppConstants.PRE_ASSESSMENT_RESULT);
+		BaseAction.clickElement(page, CommonElements.Proceed);
+		page.pause();
 	}
 
+	public static void agentDisclosures(Page page, Map<String, String> rowData) {
+		AllureUtils.logStep("proceeding with Suitability Agent Disclosures and Acknowledgments..");
+		BaseAction.drSelection(page, Suitability_Page.relationshipWithApplicant,
+				rowData.get("relationship_With_Applicant"));
+		BaseAction.typeInputField(page, Suitability_Page.Years, rowData.get("Years"));
+		BaseAction.typeInputField(page, Suitability_Page.Months, rowData.get("Months"));
+		BaseAction.drSelection(page, Suitability_Page.LevelOfAcquaintance, rowData.get("Level_Of_Acquaintance"));
+		BaseAction.multiSelectByValue(page, Suitability_Page.reasonForRecommendingProduct,
+				rowData.get("reason_For_Recommending_Product"));
+		BaseAction.selectByValue(page, Suitability_Page.existingInsuranceOrAnnuities,
+				rowData.get("existing_Insurance_Or_Annuities"));
+		BaseAction.selectByValue(page, Suitability_Page.changeOrReplaceExistingInsurance,
+				rowData.get("change_Or_Replace_Existing_Insurance"));
+		BaseAction.selectByValue(page, Suitability_Page.gaveApplicantCopy, rowData.get("gave_Applicant_Copy"));
+		BaseAction.selectByValue(page, Suitability_Page.haveMadeReasonableEffort,
+				rowData.get("have_Made_Reasonabl_eEffort"));
+		BaseAction.selectByValue(page, Suitability_Page.productRecommendationWellGrounded,
+				rowData.get("product_Recommendation_Well_Grounded"));
+		BaseAction.selectByValue(page, Suitability_Page.accuratelyRecorded, rowData.get("accurately_Recorded"));
+		BaseAction.selectByValue(page, Suitability_Page.applicationCompletion, rowData.get("application_Completion"));
+		BaseAction.clickElement(page, CommonElements.Proceed);
+	}
 }

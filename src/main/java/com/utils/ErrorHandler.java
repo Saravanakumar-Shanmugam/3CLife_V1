@@ -1,7 +1,7 @@
 package com.utils;
 import java.lang.reflect.InvocationTargetException;
 
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 
 import com.microsoft.playwright.Page;
 
@@ -37,7 +37,7 @@ public class ErrorHandler {
 	        }
 
 	        // Mark the test as failed and re-throw an exception to propagate the failure
-	        Assert.fail(message);
+	        Assertions.fail(message);
 	        throw new RuntimeException(message, exception);
 
 	    } catch (Exception e) {

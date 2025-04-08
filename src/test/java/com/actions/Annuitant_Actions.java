@@ -21,9 +21,9 @@ public class Annuitant_Actions {
 					page.locator(Annuitant_Page.valAnnuitantSameOwner).elementHandle());
 			BaseAction.selectByValue(page, Annuitant_Page.annuitantSameOwner, rowData.get("Annuitant same Owner"));
 			if (rowData.get("Annuitant same Owner").toLowerCase().contains(AppConstants.NO.toLowerCase())) {
-				BaseAction.clickElement(page, CommonElements.next);
+				BaseAction.clickElement(page, CommonElements.Proceed);
 				boolean notCompleted = BaseAction.isMenuCompleted(page, "Annuitant");
-				BaseAction.assertTrueCondition(notCompleted == false, "section is not completed.");
+				BaseAction.trueConditionCheck("section is not completed.", notCompleted == false);
 				page.waitForFunction("element => element.getAttribute('style') === 'background-color: white;'",
 						page.locator(Annuitant_Page.valAnnuitantUSCitizen).elementHandle());
 
@@ -42,7 +42,7 @@ public class Annuitant_Actions {
 					fillMailingAddress(page, rowData);
 				}
 			}
-			BaseAction.clickElement(page, CommonElements.next);
+			BaseAction.clickElement(page, CommonElements.Proceed);
 		} catch (Exception e) {
 			ErrorHandler.handleError("Annuitant Section.", e, page);
 		}
@@ -68,7 +68,7 @@ public class Annuitant_Actions {
 	}
 
 	private static void fillResidentialAddress(Page page, Map<String, String> rowData) {
-		BaseAction.fillInputField(page, CommonElements.residenceStreet1, rowData.get("Annuitant_Residence_Street 1"));
+		BaseAction.typeInputField(page, CommonElements.residenceStreet1, rowData.get("Annuitant_Residence_Street 1"));
 		BaseAction.drSelectionContain(page, rowData.get("Annuitant_Residence_City"));
 		page.waitForTimeout(ConfigReader.getTimeout());
 		BaseAction.fillInputField(page, CommonElements.residenceStreet2, rowData.get("Annuitant_Residence_Street 2"));
@@ -78,7 +78,7 @@ public class Annuitant_Actions {
 	}
 
 	private static void fillMailingAddress(Page page, Map<String, String> rowData) {
-		BaseAction.fillInputField(page, CommonElements.mailingStreet1, rowData.get("Annuitant_Mailing_Street 1"));
+		BaseAction.typeInputField(page, CommonElements.mailingStreet1, rowData.get("Annuitant_Mailing_Street 1"));
 		BaseAction.drSelectionContain(page, rowData.get("Annuitant_Mailing_City"));
 		page.waitForTimeout(ConfigReader.getTimeout());
 		BaseAction.fillInputField(page, CommonElements.mailingStreet2, rowData.get("Annuitant_Mailing_Street 2"));
@@ -86,33 +86,81 @@ public class Annuitant_Actions {
 		BaseAction.isTextPresent(page, CommonElements.mailingCity, rowData.get("Annuitant_Mailing_City"));
 		BaseAction.isTextPresent(page, CommonElements.mailingZipCode, rowData.get("Annuitant_Mailing_Zip Code"));
 	}
-	
+
 	public static void trustAnnuitant(Page page, Map<String, String> rowData) {
 		page.waitForFunction("element => element.getAttribute('style') === 'background-color: white;'",
 				page.locator(Annuitant_Page.valAnnuitantUSCitizen).elementHandle());
-				BaseAction.selectByValue(page, Annuitant_Page.annuitantUSCitizen,
-						rowData.get("Annuitant a US citizen"));
-				if (AppConstants.NO.equalsIgnoreCase(rowData.get("Annuitant a US citizen"))) {
-					page.waitForTimeout(ConfigReader.getTimeout());
-					BaseAction.isTextPresent(page, Owner_Page.productAvailablePara,
-							AppConstants.US_ONLY_ANNUITANT_MESSAGE);
-				}
-				fillAnnuitantDetails(page, rowData);
-				fillResidentialAddress(page, rowData);
-				BaseAction.selectByValue(page, CommonElements.sameAsResidentialAddress,
-						rowData.get("same as the Residential Address"));
-				if (AppConstants.NO
-						.equalsIgnoreCase(rowData.get("same as the Residential Address"))) {
-					fillMailingAddress(page, rowData);
-				}
-				BaseAction.clickElement(page, CommonElements.next);
+		BaseAction.selectByValue(page, Annuitant_Page.annuitantUSCitizen, rowData.get("Annuitant a US citizen"));
+		if (AppConstants.NO.equalsIgnoreCase(rowData.get("Annuitant a US citizen"))) {
+			page.waitForTimeout(ConfigReader.getTimeout());
+			BaseAction.isTextPresent(page, Owner_Page.productAvailablePara, AppConstants.US_ONLY_ANNUITANT_MESSAGE);
+		}
+		fillAnnuitantDetails(page, rowData);
+		fillResidentialAddress(page, rowData);
+		BaseAction.selectByValue(page, CommonElements.sameAsResidentialAddress,
+				rowData.get("same as the Residential Address"));
+		if (AppConstants.NO.equalsIgnoreCase(rowData.get("same as the Residential Address"))) {
+			fillMailingAddress(page, rowData);
+		}
+		BaseAction.clickElement(page, CommonElements.Proceed);
 	}
-	
+
 	public static void annuitantFlow(Page page, Map<String, String> rowData) {
-		if(rowData.get("Type of Ownership").equalsIgnoreCase("Trust")) {
+		if (rowData.get("Type of Ownership").equalsIgnoreCase("Trust")) {
 			trustAnnuitant(page, rowData);
-		}else {
+		} else if (rowData.get("Type of Ownership").equalsIgnoreCase("Joint")) {
+			BaseAction.selectByValue(page, Annuitant_Page.annuitantOwnerOrJointOwner,
+					rowData.get("annuitant_Owner_Or_JointOwner"));
+			BaseAction.clickElement(page, CommonElements.Proceed);
+			if (rowData.get("annuitant_Owner_Or_JointOwner").equalsIgnoreCase("No, another person")) {
+				jointAnnuitantflow(page, rowData);
+			}
+		} else {
 			annuitant(page, rowData);
 		}
 	}
+
+	public static void jointAnnuitantflow(Page page, Map<String, String> rowData) {
+		BaseAction.selectByValue(page, Annuitant_Page.annuitantUSCitizen, rowData.get("Annuitant a US citizen"));
+		if (AppConstants.NO.equalsIgnoreCase(rowData.get("Annuitant a US citizen"))) {
+			page.waitForTimeout(ConfigReader.getTimeout());
+			BaseAction.isTextPresent(page, Owner_Page.productAvailablePara, AppConstants.US_ONLY_ANNUITANT_MESSAGE);
+		}
+		fillAnnuitantDetails(page, rowData);
+		fillResidentialAddress(page, rowData);
+		BaseAction.selectByValue(page, CommonElements.sameAsResidentialAddress,
+				rowData.get("same as the Residential Address"));
+		if (AppConstants.NO.equalsIgnoreCase(rowData.get("same as the Residential Address"))) {
+			fillMailingAddress(page, rowData);
+		}
+		if (!AppConstants.NO.equalsIgnoreCase(rowData.get("Annuitant_Guardian / Power of Attorney Information").trim())) {
+			guardianFillOwnerpersonDetails(page, rowData);
+		}
+		BaseAction.clickElement(page, CommonElements.Proceed);
+	}
+	
+	private static void guardianFillOwnerpersonDetails(Page page, Map<String, String> rowData) {
+		BaseAction.drSelection(page, Owner_Page.guardianPrefix, rowData.get("Annuitant_Guardian_Prefix"));
+		BaseAction.fillInputField(page, Owner_Page.guardianFirstName, rowData.get("Annuitant_Guardian_First Name"));
+		BaseAction.fillInputField(page, Owner_Page.guardianInitial, rowData.get("Annuitant_Guardian_Initial"));
+		BaseAction.fillInputField(page, Owner_Page.guardianlastName, rowData.get("Annuitant_Guardian_Last Name"));
+		BaseAction.drSelection(page, Owner_Page.guardianSuffix, rowData.get("Annuitant_Guardian_Suffix"));
+		BaseAction.typeInputField(page, Owner_Page.guardianPhoneNumber, rowData.get("Annuitant_Guardian_Phone Number"));
+		BaseAction.fillInputField(page, Owner_Page.guardianEmailAddress, rowData.get("Annuitant_Guardian_Email Address"));
+		BaseAction.fillInputField(page, Owner_Page.guardianEmailAddressConfirmation,
+				rowData.get("Annuitant_Guardian_Email Address"));
+		BaseAction.drSelection(page, Owner_Page.guardianFormOfIdentification,
+				rowData.get("Annuitant_Guardian_Form of Identification"));
+		if (AppConstants.OTHER.equalsIgnoreCase(rowData.get("Annuitant_Guardian_Form of Identification"))) {
+			BaseAction.fillInputField(page, Owner_Page.guardianFormOfIdentificationother,
+					rowData.get("Annuitant_Guardian_Other"));
+		}
+		BaseAction.fillInputField(page, Owner_Page.guardianNumberOnIdentification,
+				rowData.get("Annuitant_Guardian_Number on Identification"));
+		BaseAction.fillInputField(page, Owner_Page.guardianStateCountryOfIssuance,
+				rowData.get("Annuitant_Guardian_State / Country of Issuance"));
+		BaseAction.datePicker(page, Owner_Page.guardianIdentificationExpirationDate,
+				rowData.get("Annuitant_Guardian_Identification Expiration Date"));
+	}
+
 }

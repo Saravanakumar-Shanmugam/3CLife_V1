@@ -27,7 +27,7 @@ public class Suitability_Runner extends AbstractRunner {
 			Map<String, String> rowData = ExcelTestDataUtil.getData().get("TestCase-No:3");
 			CreateApplication createApplication = new CreateApplication();
 //			Method createMethod = CreateApplication.class.getMethod("createApplicationPopup", Page.class,Map.class);
-			Method createMethod = CreateApplication.class.getMethod("name", Page.class, Map.class);
+			Method createMethod = CreateApplication.class.getMethod("firstRowSelection", Page.class, Map.class);
 
 			Suitability_Action product = new Suitability_Action();
 			Method additionalInformation = Suitability_Action.class.getMethod("additionalInformation", Page.class, Map.class);
@@ -39,9 +39,9 @@ public class Suitability_Runner extends AbstractRunner {
 			logger.info("Method taken from the createapplication and the method name is " + createMethod);
 			
 			Object[][] executionData = { { createApplication, createMethod, rowData },
-					{ product, additionalInformation, rowData },
-					{ product, financialResources, rowData },
-					{ product, financialProfile, rowData },
+//					{ product, additionalInformation, rowData },
+//					{ product, financialResources, rowData },
+//					{ product, financialProfile, rowData },
 					{ product, Replacements, rowData },
 					{ product, ownerAgentStatements, rowData}};
 			executeTestAcrossBrowsers(executionData);

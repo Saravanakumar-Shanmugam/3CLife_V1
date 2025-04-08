@@ -3,6 +3,9 @@ package com.actions;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.base.BaseAction;
 import com.config.ConfigReader;
 import com.constants.AppConstants;
@@ -13,7 +16,10 @@ import com.utils.AllureUtils;
 import com.utils.ErrorHandler;
 
 public class Owner_Actions {
+	
+	public static final Logger logger = LoggerFactory.getLogger(Owner_Actions.class);
 
+	
 	public static void ownerInformationOther(Page page, Map<String, String> rowData) {
 		AllureUtils.logStep("proceeding with Other Owner Information ");
 		page.waitForFunction("element => element.getAttribute('style') === 'background-color: white;'",
@@ -34,7 +40,7 @@ public class Owner_Actions {
 		BaseAction.fillInputField(page, Owner_Page.entityName, rowData.get("Entity Name"));
 		fillOwnerDetails(page, rowData);
 		fillResidentialAddress(page, rowData);
-		BaseAction.clickElement(page, CommonElements.next);
+		BaseAction.clickElement(page, CommonElements.Proceed);
 	}
 
 	private static void fillOwnerDetails(Page page, Map<String, String> rowData) {
@@ -92,7 +98,7 @@ public class Owner_Actions {
 		if (AppConstants.NO.equalsIgnoreCase(rowData.get("same as the Residential Address?"))) {
 			fillMailingAddress(page, rowData);
 		}
-		BaseAction.clickElement(page, CommonElements.next);
+		BaseAction.clickElement(page, CommonElements.Proceed);
 ;	}
 
 	public static void ownerInformationTrust(Page page, Map<String, String> rowData) {
@@ -109,13 +115,13 @@ public class Owner_Actions {
 		BaseAction.datePicker(page, Owner_Page.trustFormationDate, rowData.get("Trust Formation Date"));
 		BaseAction.typeInputField(page, Owner_Page.trustFullName, rowData.get("Trust Full Name"));
 		fillMailingAddress(page, rowData);
-		BaseAction.clickElement(page, CommonElements.next);
+		BaseAction.clickElement(page, CommonElements.Proceed);
 	}
 
 	public static void ownerInformation(Page page, Map<String, String> rowData) {
 		try {
 			boolean notCompleted = BaseAction.isMenuCompleted(page, "Owner");
-			BaseAction.assertTrueCondition(notCompleted == false, "section is not completed.");
+			BaseAction.trueConditionCheck("section is not completed.",notCompleted == false);
 			if ("Natural Person".equalsIgnoreCase(rowData.get("Type of Ownership"))
 					|| "Joint".equalsIgnoreCase(rowData.get("Type of Ownership"))) {
 				ownerInformationPerson(page, rowData);
@@ -130,7 +136,14 @@ public class Owner_Actions {
 	}
 
 	private static void fillOwnerpersonDetails(Page page, Map<String, String> rowData) {
-		BaseAction.typeInputField(page, CommonElements.socialSecurityNumber, rowData.get("Social Security Number"));
+		BaseAction.selectByValue(page, CommonElements.identificationType, rowData.get("Identification_Type"));
+		if (rowData.get("Identification_Type").equalsIgnoreCase("Social Security Number")) {
+			BaseAction.typeInputField(page, CommonElements.socialSecurityNumber, rowData.get("Social Security Number"));
+		} else if (rowData.get("Identification_Type").equalsIgnoreCase("Tax ID Number")) {
+			BaseAction.typeInputField(page, CommonElements.taxIDNumber, rowData.get("Tax ID Number"));
+		} else {
+			logger.info("Identification value is not matched with any options...");
+		}
 		BaseAction.datePicker(page, CommonElements.dateOfBirth, rowData.get("Owner_ODB"));
 		BaseAction.drSelection(page, CommonElements.gender, rowData.get("Owner_Gender"));
 		BaseAction.drSelection(page, CommonElements.prefix, rowData.get("Owner_Prefix"));
@@ -197,7 +210,7 @@ public class Owner_Actions {
 				page.waitForFunction("element => element.getAttribute('style') === 'background-color: white;'",
 						page.locator(Owner_Page.trustIdentificationType).elementHandle());
 			}
-			BaseAction.clickElement(page, CommonElements.next);
+			BaseAction.clickElement(page, CommonElements.Proceed);
 			page.waitForTimeout(ConfigReader.getTimeout());
 			List<String> splitValues = BaseAction.split(rowData.get("Owner"));
 			BaseAction.listValidation(page, CommonElements.error, splitValues);
@@ -225,7 +238,7 @@ public class Owner_Actions {
 			BaseAction.clickElement(page, CommonElements.maritalStatus);
 			BaseAction.listValidation(page, BaseAction.options, BaseAction.split(rowData.get("Owner_Marital Status")));
 			BaseAction.clickElement(page, Owner_Page.employmentStatus);
-			BaseAction.listValidation(page, BaseAction.options, BaseAction.split(rowData.get("Owner_Employment Status")));
+			BaseAction.listValidation(page, BaseAction.options, BaseAction.split(rowData.get("Owner_")));
 			BaseAction.clickElement(page, Owner_Page.taxStatus);
 			BaseAction.listValidation(page, BaseAction.options, BaseAction.split(rowData.get("Owner_Tax Status")));
 			BaseAction.clickElement(page, Owner_Page.formOfIdentification);
