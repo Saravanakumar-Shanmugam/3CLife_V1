@@ -1,1 +1,1 @@
-[{"uid":"1915154a87092ab0","name":"testLoginPagePositive()","time":{"start":1741664007587,"stop":1741664012458,"duration":4871},"status":"passed","severity":"normal"}]
+[{"uid":"c794964edf68e344","name":"testLoginPagePositive()","time":{"start":1741664007587,"stop":1741664012458,"duration":4871},"status":"passed","severity":"normal"},{"uid":"b7e8e9b85ce50594","name":"ownerInformation()","time":{"start":1744128555844,"stop":1744128558210,"duration":2366},"status":"failed","severity":"normal"}]

@@ -1,1 +1,1 @@
-{"total":1,"items":[{"uid":"92b5cc3231016bc69b471896c7ca18c9","name":"Login Page Positive Test","statistic":{"failed":0,"broken":0,"skipped":0,"passed":1,"unknown":0,"total":1}}]}
+{"total":2,"items":[{"uid":"33ad2b1cb4211f65e4ec041582e4aeea","name":"E-Application Positive Flow","statistic":{"failed":1,"broken":0,"skipped":0,"passed":0,"unknown":0,"total":1}},{"uid":"92b5cc3231016bc69b471896c7ca18c9","name":"Login Page Positive Test","statistic":{"failed":0,"broken":0,"skipped":0,"passed":1,"unknown":0,"total":1}}]}
