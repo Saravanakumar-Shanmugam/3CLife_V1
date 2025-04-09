@@ -1,3 +1,3 @@
 "Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
-"failed","Wed Apr 09 02:19:32 UTC 2025","Wed Apr 09 02:21:51 UTC 2025","138657","","com.runner.EApp_Runner","","com.runner.EApp_Runner","ownerInformation","ownerInformation()",""
+"failed","Wed Apr 09 15:07:56 UTC 2025","Wed Apr 09 15:10:04 UTC 2025","127911","","com.runner.EApp_Runner","","com.runner.EApp_Runner","ownerInformation","ownerInformation()",""
 "passed","Tue Mar 11 03:33:27 UTC 2025","Tue Mar 11 03:33:32 UTC 2025","4871","","com.runner.LoginPageRunner","","com.runner.LoginPageRunner","testLoginPagePositive","testLoginPagePositive()",""
