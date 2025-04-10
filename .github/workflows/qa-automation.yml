@@ -4,9 +4,9 @@ on:
   workflow_dispatch:  # Allows manual trigger
 
 permissions:
-  contents: write  # ✅ Allows committing results to the main branch
-  pages: write
-  id-token: write
+  contents: write     # Required for Git operations
+  pages: write        # Required to deploy to GitHub Pages
+  id-token: write     # Required for GitHub Pages OIDC deployment
 
 jobs:
   test:
@@ -17,92 +17,82 @@ jobs:
         java-version: [17]
       fail-fast: false
 
-    env:  # ✅ Global environment for the job
+    env:
       EMAIL: ${{ secrets.EMAIL }}
       PASSWORD: ${{ secrets.PASSWORD }}
+      PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
     steps:
-      - name: Checkout Repository
+      - name: 📥 Checkout Repository
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
-          path: ""  # ✅ Checkout at root, so Git commands work properly
 
-      - name: Set up JDK
+      - name: ☕ Set up JDK
         uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.java-version }}
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Install Playwright CLI (API Only)
+      - name: 🧩 Install Playwright CLI (API Only)
         run: |
           mvn exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args="install"
-        env:
-          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1  # ✅ Prevents unnecessary browser downloads
 
-      - name: Install Allure CLI
+      - name: 🛠️ Install Allure CLI
         run: |
           sudo apt remove -y allure || true
           curl -o allure-2.25.0.tgz -fsSL https://github.com/allure-framework/allure2/releases/download/2.25.0/allure-2.25.0.tgz
           tar -zxvf allure-2.25.0.tgz
           sudo mv allure-2.25.0 /opt/allure
           sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure
-          export PATH=$PATH:/opt/allure/bin
-          allure --version 
+          allure --version
 
-      - name: Run Playwright API Tests
+      - name: ▶️ Run Playwright API Tests
         run: |
           mvn clean test -Dsurefire.failIfNoTests=false -DtestFailureIgnore=true -Dallure.results.directory=allure-results
-        env:
-          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
 
-      - name: Check Allure Results
+      - name: ✅ Check Allure Results Exist
         run: |
           if [ ! -d "allure-results" ] || [ -z "$(ls -A allure-results)" ]; then
             echo "❌ No Allure results found! Exiting..."
             exit 1
           fi
 
-      - name: Generate Allure Report
+      - name: 📊 Generate Allure Report
         run: |
-          allure generate --clean allure-results -o allure-report || { echo "❌ Allure report generation failed!"; exit 1; }
+          allure generate --clean allure-results -o allure-report || {
+            echo "❌ Allure report generation failed!"
+            exit 1
+          }
 
-      - name: Check Allure Report
+      - name: 🔍 Check Allure Report Output
         run: |
           if [ ! -d "allure-report" ] || [ -z "$(ls -A allure-report)" ]; then
-            echo "❌ No Allure report generated!"
+            echo "❌ Allure report not generated!"
             exit 1
           fi
 
-      - name: Commit Allure Results and Report to Main
-        run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git checkout main  # ✅ Ensure we're on the correct branch
-          git add allure-results allure-report
-          git commit -m "📝 Update Allure results & report - $(date '+%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
-          git push origin main || echo "No changes to push"
-
-      - name: Upload Allure Report Artifact
+      - name: 📦 Upload Allure Report as Artifact
         uses: actions/upload-artifact@v4
         with:
           name: allure-report
           path: allure-report
 
-      - name: Deploy Allure Report to GitHub Pages
+      - name: 🚀 Deploy Allure Report to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: allure-report
-          clean: true  # Remove old files before deploying
+          clean: true
           commit-message: "🚀 Deploy Allure Report - $(date '+%Y-%m-%d %H:%M:%S')"
 
-      - name: Share GitHub Pages Link
+      - name: 🔗 Share GitHub Pages Link
         run: |
-          echo "✅ Allure Report deployed at: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+          echo "✅ Allure Report available at:"
+          echo "https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
 
-      - name: Send Slack Notification
+      - name: 📣 Send Slack Notification
         uses: rtCamp/action-slack-notify@v2
         env:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
