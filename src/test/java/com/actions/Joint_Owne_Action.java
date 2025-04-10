@@ -145,6 +145,7 @@ public class Joint_Owne_Action {
 	public static void jointOwnerInformation(Page page, Map<String, String> rowData) {
 		try {
 			if ("Joint".equalsIgnoreCase(rowData.get("Type of Ownership"))) {
+				page.waitForTimeout(ConfigReader.getTimeout());
 				boolean notCompleted = BaseAction.isMenuCompleted(page, "Joint Owner");
 				BaseAction.trueConditionCheck("section is not completed.", notCompleted == false);
 				jointOwnerInformationPerson(page, rowData);

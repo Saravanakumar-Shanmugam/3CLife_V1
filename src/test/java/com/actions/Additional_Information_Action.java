@@ -3,6 +3,7 @@ package com.actions;
 import java.util.Map;
 
 import com.base.BaseAction;
+import com.config.ConfigReader;
 import com.constants.AppConstants;
 import com.microsoft.playwright.Page;
 import com.page.Additional_Information_Page;
@@ -11,6 +12,7 @@ import com.page.CommonElements;
 public class Additional_Information_Action {
 
 	public static void AdditionalInformation(Page page, Map<String, String> rowdMap) {
+		page.waitForTimeout(ConfigReader.getTimeout());
 		BaseAction.selectByValue(page, Additional_Information_Page.consentElectronicallyDocuments,
 				rowdMap.get("consent_Electronically_Documents"));
 		BaseAction.selectByValue(page, Additional_Information_Page.deliveryPolicyTo, rowdMap.get("delivery_Policy_To"));

@@ -14,6 +14,7 @@ import com.utils.AllureUtils;
 public class Funding_Action {
 
 	public static void fundingFlow(Page page, Map<String, String> rowData) {
+		page.waitForTimeout(ConfigReader.getTimeout());
 		AllureUtils.logStep("proceeding with Funding Information ");
 		boolean notCompleted = BaseAction.isMenuCompleted(page, "Owner");
 		BaseAction.trueConditionCheck("section is not completed.", notCompleted == false);

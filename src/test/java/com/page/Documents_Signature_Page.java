@@ -8,9 +8,9 @@ public class Documents_Signature_Page {
 	//Documents
 
 	public static Selector uploadDocument = new Selector(SelectorType.XPATH, "//input[@type='file']//parent::div");
-	public static Selector documentName = new Selector(SelectorType.XPATH, "//div[text()='visibility']//parent::div//parent::div//span");
-	public static Selector visibility = new Selector(SelectorType.XPATH, "//div[text()='visibility']");
-	public static Selector delete = new Selector(SelectorType.XPATH, "//div[text()='delete']");
+	public static Selector documentName = new Selector(SelectorType.XPATH, "//div[@role='rowgroup'][position() > 1]//div[@role='row']/div[count(//div[@role='rowgroup'][1]//div[@role='row']/div[.//*[normalize-space(text())='Document Name']]/preceding-sibling::div) + 1 ]/a");
+	public static Selector documentTypeOptions = new Selector(SelectorType.XPATH, "//div[@role='rowgroup'][position() > 1]//div[@role='row']/div[count(//div[@role='rowgroup'][1]//div[@role='row']/div[.//*[normalize-space(text())='Document Type']]/preceding-sibling::div) + 1 ]//select");
+	public static Selector documentTypeDr = new Selector(SelectorType.XPATH, "//div[@role='rowgroup'][position() > 1]//div[@role='row']/div[count(//div[@role='rowgroup'][1]//div[@role='row']/div[.//*[normalize-space(text())='Document Type']]/preceding-sibling::div) + 1 ]//div");
 
 	// Signature
 	public static Selector city=new Selector(SelectorType.XPATH,"//label//span[contains(normalize-space(text()),'City')]//parent::label//parent::div//following-sibling::div/input");

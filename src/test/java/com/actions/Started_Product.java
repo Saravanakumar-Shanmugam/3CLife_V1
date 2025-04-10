@@ -75,6 +75,7 @@ public class Started_Product {
 					BaseAction.clickElementByIndex1(page, com.page.Started_Product.agentFirstName, i);
 					page.waitForTimeout(ConfigReader.getTimeout());
 					BaseAction.waitForNetworkIdle(page);
+					page.waitForTimeout(ConfigReader.getTimeout());
 					BaseAction.isTextPresent(page, com.page.Started_Product.agentFirstName,
 							BaseAction.split(rowData.get("Writing Agent_First Name")).get(i), i);
 					BaseAction.isTextPresent(page, com.page.Started_Product.agentMiddleName,

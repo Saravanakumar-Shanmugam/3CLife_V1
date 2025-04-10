@@ -129,7 +129,7 @@ public class AllureUtils {
 
 			// Write the JSON file
 			try (FileWriter writer = new FileWriter(executorsPath.toFile())) {
-				writer.write(executors.toString(4)); // Pretty print JSON
+				writer.write(executors.toString(4));
 			}
 
 			System.out.println("Executors file created at: " + executorsPath.toAbsolutePath());

@@ -106,6 +106,7 @@ public class Annuitant_Actions {
 	}
 
 	public static void annuitantFlow(Page page, Map<String, String> rowData) {
+		page.waitForTimeout(ConfigReader.getTimeout());
 		if (rowData.get("Type of Ownership").equalsIgnoreCase("Trust")) {
 			trustAnnuitant(page, rowData);
 		} else if (rowData.get("Type of Ownership").equalsIgnoreCase("Joint")) {

@@ -108,6 +108,7 @@ public class Joint_Annuitant_Action {
 	}
 
 	public static void jointAnnuitantFlow(Page page, Map<String, String> rowData) {
+		page.waitForTimeout(ConfigReader.getTimeout());
 		page.waitForFunction("element => element.getAttribute('style') === 'background-color: white;'",
 				page.locator(Annuitant_Page.isThereJointAnnuitantQuestion).elementHandle());
 		BaseAction.selectByValue(page, Annuitant_Page.isThereJointAnnuitant, rowData.get("Is there a Joint Annuitant"));

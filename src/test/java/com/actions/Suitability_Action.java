@@ -196,7 +196,6 @@ public class Suitability_Action {
 		BaseAction.clickElement(page, Suitability_Page.runPreAssessmentButton);
 		BaseAction.isTextPresent(page, Suitability_Page.suitabilityReviewLabel, AppConstants.PRE_ASSESSMENT_RESULT);
 		BaseAction.clickElement(page, CommonElements.Proceed);
-		page.pause();
 	}
 
 	public static void agentDisclosures(Page page, Map<String, String> rowData) {

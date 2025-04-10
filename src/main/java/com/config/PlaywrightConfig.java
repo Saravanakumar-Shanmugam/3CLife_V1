@@ -73,7 +73,7 @@ public class PlaywrightConfig {
     }
 
     private static void setupContextOptions(Browser.NewContextOptions contextOptions) {
-        if (ConfigReader.isHeadlessMode()) {
+        if (ConfigReader.isDebugMode()) {
             contextOptions.setRecordVideoDir(Paths.get(AppConstants.VIDEO_DIR_KEY))
                     .setRecordVideoSize(1280, 720);
         }
@@ -90,12 +90,12 @@ public class PlaywrightConfig {
     }
 
     private static void startTracingIfDebugMode() {
-        if (ConfigReader.isDebugMode()) {
-            context.tracing().start(new Tracing.StartOptions()
-                    .setScreenshots(true)
-                    .setSnapshots(true)
-                    .setSources(true));
-        }
+//        if (ConfigReader.isDebugMode()) {
+//            context.tracing().start(new Tracing.StartOptions()
+//                    .setScreenshots(true)
+//                    .setSnapshots(true)
+//                    .setSources(true));
+//        }
     }
 
     private static void navigateToInitialPage() {

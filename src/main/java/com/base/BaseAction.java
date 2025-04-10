@@ -18,6 +18,7 @@ import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
 import com.microsoft.playwright.PlaywrightException;
 import com.microsoft.playwright.options.LoadState;
+import com.microsoft.playwright.options.WaitForSelectorState;
 import com.selectors.LocatorFactory;
 import com.selectors.Selector;
 import com.selectors.SelectorType;
@@ -176,7 +177,30 @@ public class BaseAction {
 			logger.warn("Field not visible: {}", selector.getValue());
 		}
 	}
+	
+	public static void selectByValueByIndex(Page page, Selector selector, String value,int index) {
+		Locator locator = getLocator(page, selector, index);
+		locator.waitFor();
+		waitForElement(locator);
+		locator.selectOption(value);
+//		for (int i = 0; i < locator.count(); i++) {
+//			if (locator.nth(i).textContent().trim().equalsIgnoreCase(value)) {
+//				
+//				locator.nth(i).click();
+//				
+//				return;
+//			}
+//		}
+//		logger.error("{} is not found in the Options.", value);
+	}
 
+	public static void waitForElement(Locator locator) {
+	    locator.waitFor(new Locator.WaitForOptions()
+	        .setState(WaitForSelectorState.VISIBLE)
+	        .setTimeout(ConfigReader.getTimeout()));
+	}
+
+	
 	// Fills an input field
 	public static void tYpeInputFieldByIndex(Page page, Selector selector, String value, int index) {
 		Locator locator = getLocator(page, selector, index);

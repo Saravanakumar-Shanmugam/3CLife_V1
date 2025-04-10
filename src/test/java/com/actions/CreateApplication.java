@@ -40,7 +40,7 @@ public class CreateApplication {
 			if (page.url().equals(ConfigReader.getBaseURL())) {
 				LoginPageActions.login(page);
 			}
-			page.locator("(//div[@id='row-1']/div/div)[1]").click();
+			page.locator("(//div[@id='row-0']/div/div)[1]").click();
 		} catch (Exception e) {
 			ErrorHandler.handleError("Create Application action", e, page);
 		}

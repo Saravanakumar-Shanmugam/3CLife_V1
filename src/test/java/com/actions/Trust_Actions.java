@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.base.BaseAction;
+import com.config.ConfigReader;
 import com.constants.AppConstants;
 import com.microsoft.playwright.Page;
 import com.page.CommonElements;
@@ -17,6 +18,7 @@ public class Trust_Actions {
 
 	public static void trustFlow(Page page, Map<String, String> rowData) {
 		try {
+			page.waitForTimeout(ConfigReader.getTimeout());
 			if (rowData.get("Type of Ownership").equalsIgnoreCase("Trust")) {
 				AllureUtils.logStep("proceeding with Trust Information ");
 				boolean notCompleted = BaseAction.isMenuCompleted(page, "Trust");

@@ -16,6 +16,7 @@ public class Beneficiaries_Actions {
 	static int Entity = 0;
 
 	public static void beneficiariesFlow(Page page, Map<String, String> rowData) {
+		page.waitForTimeout(ConfigReader.getTimeout());
 		AllureUtils.logStep("proceeding with Beneficiaries Information ");
 		boolean notCompleted = BaseAction.isMenuCompleted(page, "Beneficiaries");
 		BaseAction.trueConditionCheck("section is not completed.", notCompleted == false);
